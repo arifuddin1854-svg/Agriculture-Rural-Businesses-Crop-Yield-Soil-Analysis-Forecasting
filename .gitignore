@@ -80,11 +80,10 @@ Thumbs.db
 ehthumbs.db
 [Dd]esktop.ini
 
-# Large dataset files (keep .gitkeep)
-data/raw/*
-!data/raw/.gitkeep
-data/processed/*
-!data/processed/.gitkeep
+# Dataset files (keep CSVs for reproducible benchmarks, ignore huge binaries)
+*.tar.gz
+*.zip
+*.parquet
 
 # Model checkpoints (keep .gitkeep)
 models/*
