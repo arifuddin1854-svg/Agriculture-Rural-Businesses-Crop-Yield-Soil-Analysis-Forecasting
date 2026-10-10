@@ -1,0 +1,294 @@
+{
+  "soil_chemistry": {
+    "dataset": "soil_chemistry",
+    "initial_records": 15,
+    "final_records": 15,
+    "initial_nulls": {
+      "district_id": 0,
+      "soil_type": 0,
+      "nitrogen_kg_ha": 0,
+      "phosphorus_kg_ha": 0,
+      "potassium_kg_ha": 0,
+      "soil_ph": 0,
+      "organic_matter_pct": 0,
+      "electrical_conductivity_ds_m": 0
+    },
+    "imputed_nulls": {},
+    "boundary_violations_corrected": {},
+    "temperature_inversions_swapped": 0,
+    "outliers_flagged_iqr": {
+      "nitrogen_kg_ha": 0,
+      "phosphorus_kg_ha": 0,
+      "potassium_kg_ha": 0,
+      "soil_ph": 1,
+      "organic_matter_pct": 0,
+      "electrical_conductivity_ds_m": 0
+    },
+    "before_stats": {
+      "nitrogen_kg_ha": {
+        "min": 66.51,
+        "mean": 112.7,
+        "std": 31.32,
+        "max": 156.99
+      },
+      "phosphorus_kg_ha": {
+        "min": 20.32,
+        "mean": 44.13,
+        "std": 15.56,
+        "max": 64.25
+      },
+      "potassium_kg_ha": {
+        "min": 83.23,
+        "mean": 160.18,
+        "std": 49.46,
+        "max": 218.16
+      },
+      "soil_ph": {
+        "min": 4.79,
+        "mean": 6.32,
+        "std": 0.65,
+        "max": 7.15
+      },
+      "organic_matter_pct": {
+        "min": 0.6,
+        "mean": 1.19,
+        "std": 0.29,
+        "max": 1.69
+      },
+      "electrical_conductivity_ds_m": {
+        "min": 0.3,
+        "mean": 0.51,
+        "std": 0.11,
+        "max": 0.69
+      }
+    },
+    "after_stats": {
+      "nitrogen_kg_ha": {
+        "min": 66.51,
+        "mean": 112.7,
+        "std": 31.32,
+        "max": 156.99
+      },
+      "phosphorus_kg_ha": {
+        "min": 20.32,
+        "mean": 44.13,
+        "std": 15.56,
+        "max": 64.25
+      },
+      "potassium_kg_ha": {
+        "min": 83.23,
+        "mean": 160.18,
+        "std": 49.46,
+        "max": 218.16
+      },
+      "soil_ph": {
+        "min": 4.79,
+        "mean": 6.32,
+        "std": 0.65,
+        "max": 7.15
+      },
+      "organic_matter_pct": {
+        "min": 0.6,
+        "mean": 1.19,
+        "std": 0.29,
+        "max": 1.69
+      },
+      "electrical_conductivity_ds_m": {
+        "min": 0.3,
+        "mean": 0.51,
+        "std": 0.11,
+        "max": 0.69
+      }
+    },
+    "audit_notes": []
+  },
+  "historical_yields": {
+    "dataset": "historical_yields",
+    "initial_records": 225,
+    "final_records": 225,
+    "initial_nulls": {
+      "district_id": 0,
+      "year": 0,
+      "crop_type": 0,
+      "planted_area_ha": 0,
+      "production_mt": 0,
+      "crop_yield_mt_ha": 0
+    },
+    "imputed_nulls": {},
+    "boundary_violations_corrected": {},
+    "temperature_inversions_swapped": 0,
+    "outliers_flagged_iqr": {
+      "planted_area_ha": 0,
+      "production_mt": 1,
+      "crop_yield_mt_ha": 0
+    },
+    "before_stats": {
+      "year": {
+        "min": 2019.0,
+        "mean": 2021.0,
+        "std": 1.42,
+        "max": 2023.0
+      },
+      "planted_area_ha": {
+        "min": 532.5,
+        "mean": 1923.59,
+        "std": 821.09,
+        "max": 3488.8
+      },
+      "production_mt": {
+        "min": 1312.5,
+        "mean": 7480.92,
+        "std": 4191.22,
+        "max": 20143.6
+      },
+      "crop_yield_mt_ha": {
+        "min": 1.4,
+        "mean": 3.87,
+        "std": 1.33,
+        "max": 6.85
+      }
+    },
+    "after_stats": {
+      "year": {
+        "min": 2019.0,
+        "mean": 2021.0,
+        "std": 1.42,
+        "max": 2023.0
+      },
+      "planted_area_ha": {
+        "min": 532.5,
+        "mean": 1923.59,
+        "std": 821.09,
+        "max": 3488.8
+      },
+      "production_mt": {
+        "min": 1312.5,
+        "mean": 7480.92,
+        "std": 4191.22,
+        "max": 20143.6
+      },
+      "crop_yield_mt_ha": {
+        "min": 1.4,
+        "mean": 3.87,
+        "std": 1.33,
+        "max": 6.85
+      }
+    },
+    "audit_notes": []
+  },
+  "weather_daily": {
+    "dataset": "weather_daily",
+    "initial_records": 27390,
+    "final_records": 27390,
+    "initial_nulls": {
+      "district_id": 0,
+      "date": 0,
+      "year": 0,
+      "month": 0,
+      "temp_max": 0,
+      "temp_min": 0,
+      "precipitation_mm": 0,
+      "relative_humidity": 0,
+      "solar_radiation_mj": 0
+    },
+    "imputed_nulls": {},
+    "boundary_violations_corrected": {},
+    "temperature_inversions_swapped": 0,
+    "outliers_flagged_iqr": {
+      "temp_max": 0,
+      "temp_min": 0,
+      "precipitation_mm": 5565,
+      "relative_humidity": 0,
+      "solar_radiation_mj": 90
+    },
+    "before_stats": {
+      "year": {
+        "min": 2019.0,
+        "mean": 2021.0,
+        "std": 1.41,
+        "max": 2023.0
+      },
+      "month": {
+        "min": 1.0,
+        "mean": 6.52,
+        "std": 3.45,
+        "max": 12.0
+      },
+      "temp_max": {
+        "min": 18.2,
+        "mean": 30.24,
+        "std": 6.03,
+        "max": 43.2
+      },
+      "temp_min": {
+        "min": 6.2,
+        "mean": 17.73,
+        "std": 5.96,
+        "max": 30.3
+      },
+      "precipitation_mm": {
+        "min": 0.0,
+        "mean": 3.67,
+        "std": 10.92,
+        "max": 140.0
+      },
+      "relative_humidity": {
+        "min": 20.0,
+        "mean": 56.93,
+        "std": 17.27,
+        "max": 98.0
+      },
+      "solar_radiation_mj": {
+        "min": 6.0,
+        "mean": 18.5,
+        "std": 3.97,
+        "max": 28.0
+      }
+    },
+    "after_stats": {
+      "year": {
+        "min": 2019.0,
+        "mean": 2021.0,
+        "std": 1.41,
+        "max": 2023.0
+      },
+      "month": {
+        "min": 1.0,
+        "mean": 6.52,
+        "std": 3.45,
+        "max": 12.0
+      },
+      "temp_max": {
+        "min": 18.2,
+        "mean": 30.24,
+        "std": 6.03,
+        "max": 43.2
+      },
+      "temp_min": {
+        "min": 6.2,
+        "mean": 17.73,
+        "std": 5.96,
+        "max": 30.3
+      },
+      "precipitation_mm": {
+        "min": 0.0,
+        "mean": 3.67,
+        "std": 10.92,
+        "max": 140.0
+      },
+      "relative_humidity": {
+        "min": 20.0,
+        "mean": 56.93,
+        "std": 17.27,
+        "max": 98.0
+      },
+      "solar_radiation_mj": {
+        "min": 6.0,
+        "mean": 18.5,
+        "std": 3.97,
+        "max": 28.0
+      }
+    },
+    "audit_notes": []
+  }
+}

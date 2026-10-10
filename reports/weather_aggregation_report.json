@@ -1,0 +1,220 @@
+{
+  "timestamp": "2026-10-10T10:07:18.167961",
+  "total_phenological_records": 225,
+  "total_annual_records": 75,
+  "unique_districts": 15,
+  "unique_years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "crop_breakdown": {
+    "Cotton": {
+      "records_count": 39,
+      "metrics": {
+        "cumulative_rainfall_mm": {
+          "mean": 1123.91,
+          "std": 258.53,
+          "min": 569.2,
+          "max": 1743.3
+        },
+        "gdd_cumulative": {
+          "mean": 3282.37,
+          "std": 274.47,
+          "min": 2958.3,
+          "max": 3776.05
+        },
+        "mean_temp_max": {
+          "mean": 33.71,
+          "std": 1.46,
+          "min": 32.11,
+          "max": 36.38
+        },
+        "heat_stress_days": {
+          "mean": 78.95,
+          "std": 32.57,
+          "min": 39.0,
+          "max": 135.0
+        },
+        "mean_vpd_kpa": {
+          "mean": 1.37,
+          "std": 0.11,
+          "min": 1.23,
+          "max": 1.58
+        },
+        "consecutive_dry_days_max": {
+          "mean": 28.28,
+          "std": 8.96,
+          "min": 13.0,
+          "max": 52.0
+        }
+      }
+    },
+    "Maize": {
+      "records_count": 44,
+      "metrics": {
+        "cumulative_rainfall_mm": {
+          "mean": 1042.2,
+          "std": 233.11,
+          "min": 543.7,
+          "max": 1507.3
+        },
+        "gdd_cumulative": {
+          "mean": 3315.55,
+          "std": 187.71,
+          "min": 3092.35,
+          "max": 3639.7
+        },
+        "mean_temp_max": {
+          "mean": 34.99,
+          "std": 1.5,
+          "min": 33.38,
+          "max": 37.59
+        },
+        "heat_stress_days": {
+          "mean": 100.16,
+          "std": 28.2,
+          "min": 65.0,
+          "max": 146.0
+        },
+        "mean_vpd_kpa": {
+          "mean": 1.39,
+          "std": 0.12,
+          "min": 1.23,
+          "max": 1.67
+        },
+        "consecutive_dry_days_max": {
+          "mean": 23.2,
+          "std": 6.93,
+          "min": 11.0,
+          "max": 37.0
+        }
+      }
+    },
+    "Rice": {
+      "records_count": 53,
+      "metrics": {
+        "cumulative_rainfall_mm": {
+          "mean": 1089.51,
+          "std": 220.5,
+          "min": 648.9,
+          "max": 1566.4
+        },
+        "gdd_cumulative": {
+          "mean": 3072.67,
+          "std": 215.18,
+          "min": 2813.7,
+          "max": 3420.05
+        },
+        "mean_temp_max": {
+          "mean": 33.73,
+          "std": 1.61,
+          "min": 31.99,
+          "max": 36.31
+        },
+        "heat_stress_days": {
+          "mean": 89.21,
+          "std": 22.01,
+          "min": 60.0,
+          "max": 123.0
+        },
+        "mean_vpd_kpa": {
+          "mean": 1.28,
+          "std": 0.13,
+          "min": 1.13,
+          "max": 1.53
+        },
+        "consecutive_dry_days_max": {
+          "mean": 26.89,
+          "std": 8.89,
+          "min": 13.0,
+          "max": 53.0
+        }
+      }
+    },
+    "Soybean": {
+      "records_count": 40,
+      "metrics": {
+        "cumulative_rainfall_mm": {
+          "mean": 996.1,
+          "std": 239.02,
+          "min": 548.5,
+          "max": 1559.9
+        },
+        "gdd_cumulative": {
+          "mean": 2618.44,
+          "std": 140.2,
+          "min": 2459.0,
+          "max": 2859.25
+        },
+        "mean_temp_max": {
+          "mean": 35.24,
+          "std": 1.54,
+          "min": 33.46,
+          "max": 37.8
+        },
+        "heat_stress_days": {
+          "mean": 89.65,
+          "std": 20.9,
+          "min": 60.0,
+          "max": 122.0
+        },
+        "mean_vpd_kpa": {
+          "mean": 1.29,
+          "std": 0.13,
+          "min": 1.12,
+          "max": 1.54
+        },
+        "consecutive_dry_days_max": {
+          "mean": 19.12,
+          "std": 6.79,
+          "min": 9.0,
+          "max": 34.0
+        }
+      }
+    },
+    "Wheat": {
+      "records_count": 49,
+      "metrics": {
+        "cumulative_rainfall_mm": {
+          "mean": 237.65,
+          "std": 105.73,
+          "min": 102.4,
+          "max": 619.7
+        },
+        "gdd_cumulative": {
+          "mean": 2431.66,
+          "std": 400.23,
+          "min": 1525.15,
+          "max": 2978.9
+        },
+        "mean_temp_max": {
+          "mean": 25.58,
+          "std": 1.53,
+          "min": 23.62,
+          "max": 27.89
+        },
+        "heat_stress_days": {
+          "mean": 9.22,
+          "std": 7.89,
+          "min": 0.0,
+          "max": 24.0
+        },
+        "mean_vpd_kpa": {
+          "mean": 1.27,
+          "std": 0.12,
+          "min": 1.09,
+          "max": 1.48
+        },
+        "consecutive_dry_days_max": {
+          "mean": 41.92,
+          "std": 14.36,
+          "min": 20.0,
+          "max": 82.0
+        }
+      }
+    }
+  }
+}
