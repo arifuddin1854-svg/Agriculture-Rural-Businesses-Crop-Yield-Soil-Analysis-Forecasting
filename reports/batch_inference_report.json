@@ -1,0 +1,81 @@
+{
+  "execution_timestamp": "2026-10-22T00:46:20.670692",
+  "pipeline_stage": "Day 11 - Production Batch Inference",
+  "model_metadata": {
+    "model_name": "Random_Forest",
+    "features_count": 57,
+    "spatial_cv_r2": 0.8033
+  },
+  "summary_kpis": {
+    "total_records_processed": 225,
+    "throughput_records_per_sec": 13.1,
+    "execution_time_seconds": 17.141,
+    "regional_mean_yield_mt_ha": 3.857,
+    "regional_total_production_mt": 1679556.5,
+    "mean_uncertainty_std_mt_ha": 0.473,
+    "mean_counterfactual_gain_pct": 5.66
+  },
+  "risk_profile_distribution": {
+    "HIGH": 201,
+    "CRITICAL": 22,
+    "MODERATE": 2
+  },
+  "crop_breakdown": {
+    "Cotton": {
+      "records": 39,
+      "mean_yield_mt_ha": 2.151,
+      "std_yield_mt_ha": 0.326,
+      "min_yield_mt_ha": 1.636,
+      "max_yield_mt_ha": 2.969,
+      "mean_ci_spread_mt_ha": 1.791,
+      "total_production_mt": 133599.97,
+      "mean_potential_gain_pct": 9.0
+    },
+    "Maize": {
+      "records": 44,
+      "mean_yield_mt_ha": 5.606,
+      "std_yield_mt_ha": 0.338,
+      "min_yield_mt_ha": 4.784,
+      "max_yield_mt_ha": 6.283,
+      "mean_ci_spread_mt_ha": 1.897,
+      "total_production_mt": 461748.19,
+      "mean_potential_gain_pct": 3.49
+    },
+    "Rice": {
+      "records": 53,
+      "mean_yield_mt_ha": 4.092,
+      "std_yield_mt_ha": 0.273,
+      "min_yield_mt_ha": 3.619,
+      "max_yield_mt_ha": 5.171,
+      "mean_ci_spread_mt_ha": 1.87,
+      "total_production_mt": 473883.25,
+      "mean_potential_gain_pct": 4.74
+    },
+    "Soybean": {
+      "records": 40,
+      "mean_yield_mt_ha": 2.659,
+      "std_yield_mt_ha": 0.248,
+      "min_yield_mt_ha": 2.173,
+      "max_yield_mt_ha": 3.188,
+      "mean_ci_spread_mt_ha": 1.684,
+      "total_production_mt": 213542.26,
+      "mean_potential_gain_pct": 7.51
+    },
+    "Wheat": {
+      "records": 49,
+      "mean_yield_mt_ha": 4.368,
+      "std_yield_mt_ha": 0.35,
+      "min_yield_mt_ha": 3.661,
+      "max_yield_mt_ha": 4.988,
+      "mean_ci_spread_mt_ha": 1.993,
+      "total_production_mt": 396782.83,
+      "mean_potential_gain_pct": 4.45
+    }
+  },
+  "top_prescribed_actions": {
+    "Synchronized Nitrogen Top-Dressing": 90,
+    "Biochar & Green Manure Incorporation": 60,
+    "Apply Agricultural Limestone (CaCO3)": 45,
+    "Rock Phosphate & Mycorrhizal Inoculant": 30
+  }
+}

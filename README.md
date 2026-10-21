@@ -229,6 +229,25 @@ Total Potential Yield Gain: +0.79 MT/Ha (New Forecast: 5.61 MT/Ha)
 ================================================================================
 ```
 
+### 4. Production Batch Prediction & Uncertainty Quantification (Day 11)
+Execute high-throughput batch predictions with 95% Confidence Intervals across regional farm datasets:
+```bash
+python run_batch_inference.py --input data/processed/unified_agri_dataset.csv --output data/processed/batch_predictions.csv
+```
+
+### 5. Production Real-Time REST API Serving (Day 11)
+Launch the lightweight, dependency-free REST API model server:
+```bash
+python -m src.api_service --port 8000
+```
+
+#### API Endpoints
+- **`GET  /health`**: Health status, model version, and spatial $R^2 = 0.8033$.
+- **`GET  /model/metadata`**: Full model architecture, features list, and CV benchmarks.
+- **`POST /api/v1/predict`**: Real-time yield forecast with 95% confidence intervals and risk scoring.
+- **`POST /api/v1/prescribe`**: Forecast + actionable counterfactual soil amendments with % yield upside.
+- **`POST /api/v1/batch`**: Multi-farm regional batch predictions.
+
 ---
 
 ## 📊 Analytical Methodology
