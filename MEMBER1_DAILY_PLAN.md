@@ -22,7 +22,11 @@
 | **Day 3** | **Phenological Daily Weather Aggregations** | • Aggregate daily weather into growing-season metrics (cumulative rain, GDD, heat stress days $T_{\max} \ge 35^\circ\text{C}$).<br/>• Handle temporal alignment across crop phenology. | • `src/weather_aggregation.py`<br/>• `data/processed/weather_aggregated.csv`<br/>• Quality audit reports | **✅ Completed** |
 | **Day 4** | **Geospatial Data Fusion** | • Merge aggregated weather, soil chemistry, and crop yields using geographic IDs (`district_id`, `year`, `crop_type`).<br/>• Foreign key verification & spatial integrity checks. | • `src/data_fusion.py`<br/>• `data/processed/unified_agri_dataset.csv`<br/>• Data fusion reports | **✅ Completed** |
 | **Day 5** | **Exploratory Data Analysis (EDA)** | • Conduct end-to-end agronomic EDA in Jupyter.<br/>• Missingness profile, yield distributions, NPK/pH correlations, weather stress impact.<br/>• Render publication-quality visual artifacts. | • `notebooks/01_data_integration_eda.ipynb`<br/>• Figures in `reports/figures/`<br/>• `reports/eda_summary_report.md` | **✅ Completed** |
-| **Day 6** | **Pipeline Integration & Final Deliverable Review** | • Build end-to-end CLI orchestrator `run_data_pipeline.py`.<br/>• 19 comprehensive unit & integration tests.<br/>• Verify hand-off readiness for Member 2 (Feature Engineering). | • `run_data_pipeline.py`<br/>• `tests/test_master_pipeline.py`<br/>• Comprehensive documentation | **✅ Completed** |
+| **Day 6** | **Pipeline Integration & Final Deliverable Review** | • Build end-to-end CLI orchestrator `run_data_pipeline.py`.<br/>• 19 comprehensive unit & integration tests.<br/>• Complete Member 1 data engineering handoff. | • `run_data_pipeline.py`<br/>• `tests/test_master_pipeline.py`<br/>• Comprehensive documentation | **✅ Completed** |
+| **Day 7** | **Agronomic Feature Engineering Pipeline** | • Derive N-P-K stoichiometric nutrient ratios and soil buffering indices.<br/>• Calculate hydrothermal climate stress & aridity indices.<br/>• Encode categorical features (`crop_type`, `soil_type`). | • `src/features.py`<br/>• `data/processed/train_features.csv` & `.parquet`<br/>• `tests/test_features.py` | **✅ Completed** |
+| **Day 8** | **Feature Analysis, Visual EDA & Notebook 02** | • Bivariate stoichiometric response curves.<br/>• Hydrothermal stress landscape & correlation rankings.<br/>• Build Jupyter Notebook 02. | • `notebooks/02_feature_engineering_eda.ipynb`<br/>• Figures in `reports/figures/02_*.png`<br/>• `reports/feature_analysis_eda_report.md` | **✅ Completed** |
+| **Day 9** | **Spatial Block CV & Ensemble Modeling** | • Enforce 5-Fold Spatial Group-KFold (by District) & Leave-One-Year-Out (LOYO) CV.<br/>• Benchmark Ridge, Random Forest, Gradient Boosting, HistGradientBoosting.<br/>• Hyperparameter tuning and model checkpoint export. | • `src/models.py`<br/>• `models/best_yield_regressor.joblib`<br/>• `notebooks/03_model_training_evaluation.ipynb`<br/>• `tests/test_models.py` | **✅ Completed** |
+| **Day 10** | **SHAP Factor Attribution & Prescriptive Advisory** | • SHAP TreeExplainer global attribution.<br/>• Decouple controllable inputs (N, P, K, pH) from exogenous weather.<br/>• Prescriptive farmer advisory CLI with counterfactual yield gains. | • `src/shap_engine.py`<br/>• `src/advisor.py`<br/>• `notebooks/04_shap_explainability.ipynb`<br/>• `tests/test_advisor.py` | **✅ Completed** |
 
 ---
 
@@ -129,10 +133,54 @@
    python -m unittest discover tests
    ```
 
+### 🗓️ Day 7: Agronomic Feature Engineering Pipeline
+1. **[src/features.py](file:///d:/crop%20yeild%20detection/src/features.py)**:
+   - **Soil Stoichiometry**: Total NPK, nutrient ratios ($N$ ratio, $P$ ratio, $K$ ratio), $N:P$, $N:K$, $P:K$ balance, and pH deviation from neutral.
+   - **Hydrothermal Stress & Aridity**: Water-to-thermal stress index, rainfall intensity per season day, heat stress frequency, drought severity, and photothermal ratios.
+   - **Categorical Encoders**: One-hot encoding for `crop_type` and `soil_type` while preserving spatial and temporal tracking keys (`district_id`, `year`).
+2. **Processed Feature Stores**:
+   - `data/processed/train_features.csv`: 225 rows, 63 features, 0 nulls.
+   - `data/processed/train_features.parquet`.
+3. **Audit Reports**: `reports/feature_engineering_report.json` and `.md`.
+4. **Unit Test Suite**: **[tests/test_features.py](file:///d:/crop%20yeild%20detection/tests/test_features.py)** (4 passing tests).
+
+### 🗓️ Day 8: Feature Analysis, Visual EDA & Notebook 02
+1. **[src/feature_eda_generator.py](file:///d:/crop%20yeild%20detection/src/feature_eda_generator.py)**:
+   - Generated publication-quality figures:
+     * `reports/figures/02_npk_stoichiometry_vs_yield.png`
+     * `reports/figures/02_hydrothermal_stress_surface.png`
+     * `reports/figures/02_feature_correlation_ranking.png`
+2. **Jupyter Notebook**: **[notebooks/02_feature_engineering_eda.ipynb](file:///d:/crop%20yeild%20detection/notebooks/02_feature_engineering_eda.ipynb)**.
+3. **Summary Report**: `reports/feature_analysis_eda_report.md`.
+
+### 🗓️ Day 9: Spatial Block Cross-Validation & Ensemble Regression
+1. **[src/models.py](file:///d:/crop%20yeild%20detection/src/models.py)**:
+   - **Spatial Group-KFold (5 Folds by District)**: Zero spatial leakage across contiguous agricultural zones.
+   - **Leave-One-Year-Out (LOYO)**: Tested model generalization across 2019–2023 climate epochs.
+   - **Benchmarked Regressors**: Ridge, Random Forest, Gradient Boosting, HistGradientBoosting.
+   - **Champion Model**: Random Forest ($R^2 = 0.8033$, $\text{RMSE} = 0.5882\text{ MT/Ha}$, $\text{MAPE} = 12.97\%$).
+2. **Production Checkpoint**: `models/best_yield_regressor.joblib`.
+3. **Visual Figures**:
+   - `reports/figures/03_actual_vs_predicted_yield.png`
+   - `reports/figures/03_spatial_cv_error_distribution.png`
+4. **Jupyter Notebook**: **[notebooks/03_model_training_evaluation.ipynb](file:///d:/crop%20yeild%20detection/notebooks/03_model_training_evaluation.ipynb)**.
+5. **Unit Test Suite**: **[tests/test_models.py](file:///d:/crop%20yeild%20detection/tests/test_models.py)** (3 passing tests).
+
+### 🗓️ Day 10: SHAP Factor Attribution & Prescriptive Agronomic Advisory
+1. **[src/shap_engine.py](file:///d:/crop%20yeild%20detection/src/shap_engine.py)**:
+   - TreeSHAP feature attribution: Global beeswarm summary plot and factor domain disentanglement (Controllable nutrients vs. Exogenous weather).
+   - Figures: `reports/figures/04_shap_summary_beeswarm.png` and `reports/figures/04_shap_controllable_vs_exogenous.png`.
+   - Notebook: **[notebooks/04_shap_explainability.ipynb](file:///d:/crop%20yeild%20detection/notebooks/04_shap_explainability.ipynb)**.
+2. **[src/advisor.py](file:///d:/crop%20yeild%20detection/src/advisor.py)**:
+   - Real-time farm soil diagnostic and counterfactual yield gain calculator.
+   - Custom agronomic prescriptions: Limestone application for acidity stress, sulfur/compost for alkalinity, nitrogen top-dressing scheduling, and N:P:K stoichiometry balance.
+3. **Unit Test Suite**: **[tests/test_advisor.py](file:///d:/crop%20yeild%20detection/tests/test_advisor.py)** (3 passing tests).
+
 ---
 
-## 🎯 Handoff Readiness for Member 2 (Feature Engineering)
-- ✅ **Master Dataset**: `data/processed/unified_agri_dataset.csv` (225 rows, 35 features, zero missing values).
-- ✅ **Integrity**: Verified 100% referential alignment between geographic IDs, crop phenological cycles, and soil profiles.
-- ✅ **Audit Reports**: Full suite of JSON and Markdown reports available in `reports/`.
-- ✅ **Automated CLI**: `run_data_pipeline.py` ready for automated batch execution.
+## 🎯 Final Project Milestone & Test Suite Status
+- ✅ **10 / 10 Sprint Days Completed**: 100% full lifecycle implementation from raw data ingestion to prescriptive SHAP advisor.
+- ✅ **Test Suite Coverage**: **29 / 29 automated unit & integration tests passing (100% pass rate)**.
+- ✅ **Production Artifacts**: `data/processed/unified_agri_dataset.csv`, `data/processed/train_features.csv`, and `models/best_yield_regressor.joblib`.
+- ✅ **Publication Visuals**: 10 high-resolution analytical figures rendered in `reports/figures/`.
+- ✅ **Jupyter Notebooks**: Complete 4-notebook suite (`01` through `04`) in `notebooks/`.

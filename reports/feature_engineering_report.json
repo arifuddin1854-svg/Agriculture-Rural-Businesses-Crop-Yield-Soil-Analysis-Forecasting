@@ -1,0 +1,221 @@
+{
+  "timestamp": "2026-10-21T15:12:27.780439",
+  "input_dataset": "data\\processed\\unified_agri_dataset.csv",
+  "total_records": 225,
+  "base_feature_count": 35,
+  "total_engineered_features": 63,
+  "newly_derived_features_count": 28,
+  "newly_derived_features": [
+    "npk_total_kg_ha",
+    "n_ratio",
+    "p_ratio",
+    "k_ratio",
+    "n_to_p_ratio",
+    "n_to_k_ratio",
+    "p_to_k_ratio",
+    "npk_imbalance_index",
+    "soil_ph_deviation_from_neutral",
+    "soil_acidity_stress",
+    "soil_alkalinity_stress",
+    "som_buffering_capacity",
+    "hydro_thermal_stress_index",
+    "rainfall_per_season_day",
+    "heat_stress_frequency",
+    "drought_severity_index",
+    "photothermal_ratio",
+    "atmospheric_aridity_index",
+    "crop_type_Cotton",
+    "crop_type_Maize",
+    "crop_type_Rice",
+    "crop_type_Soybean",
+    "crop_type_Wheat",
+    "soil_type_Alluvial",
+    "soil_type_Black Soil",
+    "soil_type_Clay Loam",
+    "soil_type_Laterite",
+    "soil_type_Red Sandy Loam"
+  ],
+  "encoded_columns": [
+    "crop_type_Cotton",
+    "crop_type_Maize",
+    "crop_type_Rice",
+    "crop_type_Soybean",
+    "crop_type_Wheat",
+    "soil_type_Alluvial",
+    "soil_type_Black Soil",
+    "soil_type_Clay Loam",
+    "soil_type_Laterite",
+    "soil_type_Red Sandy Loam"
+  ],
+  "null_count": 0,
+  "feature_summary_stats": {
+    "npk_total_kg_ha": {
+      "mean": 317.008,
+      "std": 64.6425,
+      "min": 199.29,
+      "max": 385.86
+    },
+    "n_ratio": {
+      "mean": 0.3599,
+      "std": 0.0822,
+      "min": 0.1931,
+      "max": 0.5392
+    },
+    "p_ratio": {
+      "mean": 0.1412,
+      "std": 0.0452,
+      "min": 0.0612,
+      "max": 0.2122
+    },
+    "k_ratio": {
+      "mean": 0.499,
+      "std": 0.0899,
+      "min": 0.3385,
+      "max": 0.6471
+    },
+    "n_to_p_ratio": {
+      "mean": 2.9169,
+      "std": 1.3881,
+      "min": 1.0608,
+      "max": 6.0051
+    },
+    "n_to_k_ratio": {
+      "mean": 0.7746,
+      "std": 0.3203,
+      "min": 0.3091,
+      "max": 1.4558
+    },
+    "p_to_k_ratio": {
+      "mean": 0.2992,
+      "std": 0.1235,
+      "min": 0.107,
+      "max": 0.5236
+    },
+    "npk_imbalance_index": {
+      "mean": 0.349,
+      "std": 0.0899,
+      "min": 0.1885,
+      "max": 0.4971
+    },
+    "soil_ph_deviation_from_neutral": {
+      "mean": 0.5027,
+      "std": 0.4233,
+      "min": 0.06,
+      "max": 1.71
+    },
+    "soil_acidity_stress": {
+      "mean": 0.1367,
+      "std": 0.3282,
+      "min": 0.0,
+      "max": 1.21
+    },
+    "soil_alkalinity_stress": {
+      "mean": 0.0,
+      "std": 0.0,
+      "min": 0.0,
+      "max": 0.0
+    },
+    "som_buffering_capacity": {
+      "mean": 2.2566,
+      "std": 0.5365,
+      "min": 1.1623,
+      "max": 3.3196
+    },
+    "hydro_thermal_stress_index": {
+      "mean": 18.6723,
+      "std": 8.1862,
+      "min": 2.5356,
+      "max": 40.3354
+    },
+    "rainfall_per_season_day": {
+      "mean": 4.8822,
+      "std": 2.222,
+      "min": 0.5626,
+      "max": 10.1954
+    },
+    "heat_stress_frequency": {
+      "mean": 0.4014,
+      "std": 0.232,
+      "min": 0.0,
+      "max": 0.7974
+    },
+    "drought_severity_index": {
+      "mean": 0.395,
+      "std": 0.696,
+      "min": 0.0177,
+      "max": 5.1745
+    },
+    "photothermal_ratio": {
+      "mean": 88.0919,
+      "std": 10.0373,
+      "min": 66.7132,
+      "max": 107.5845
+    },
+    "atmospheric_aridity_index": {
+      "mean": 16.4762,
+      "std": 1.6804,
+      "min": 13.5036,
+      "max": 20.8125
+    },
+    "crop_type_Cotton": {
+      "mean": 0.1733,
+      "std": 0.3794,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "crop_type_Maize": {
+      "mean": 0.1956,
+      "std": 0.3975,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "crop_type_Rice": {
+      "mean": 0.2356,
+      "std": 0.4253,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "crop_type_Soybean": {
+      "mean": 0.1778,
+      "std": 0.3832,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "crop_type_Wheat": {
+      "mean": 0.2178,
+      "std": 0.4137,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "soil_type_Alluvial": {
+      "mean": 0.1333,
+      "std": 0.3407,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "soil_type_Black Soil": {
+      "mean": 0.1333,
+      "std": 0.3407,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "soil_type_Clay Loam": {
+      "mean": 0.4,
+      "std": 0.491,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "soil_type_Laterite": {
+      "mean": 0.2667,
+      "std": 0.4432,
+      "min": 0.0,
+      "max": 1.0
+    },
+    "soil_type_Red Sandy Loam": {
+      "mean": 0.0667,
+      "std": 0.25,
+      "min": 0.0,
+      "max": 1.0
+    }
+  }
+}
