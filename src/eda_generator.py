@@ -58,8 +58,8 @@ def generate_eda_figures(
     crops_order = ["Cotton", "Soybean", "Rice", "Wheat", "Maize"]
     
     sns.boxplot(
-        data=df, x="crop_type", y="crop_yield_mt_ha",
-        order=crops_order, palette=crop_palette,
+        data=df, x="crop_type", y="crop_yield_mt_ha", hue="crop_type",
+        order=crops_order, palette=crop_palette, legend=False,
         boxprops=dict(alpha=0.7), showmeans=True,
         meanprops=dict(marker="o", markeredgecolor="black", markerfacecolor="white", markersize=7),
         ax=ax
