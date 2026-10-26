@@ -10,9 +10,9 @@ class SoilLog(Base, TimestampMixin):
     __tablename__ = "soil_logs"
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
-    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
-    field_name = Column(String(150), nullable=False)
-    district = Column(String(100), nullable=False, index=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    field_name = Column(String(150), default="Primary Plot", nullable=False)
+    district = Column(String(100), default="Default District", nullable=False, index=True)
     
     # Geographic coordinates
     latitude = Column(Float, nullable=True)

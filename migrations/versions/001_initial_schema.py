@@ -42,7 +42,7 @@ def upgrade() -> None:
     op.create_table(
         'soil_logs',
         sa.Column('id', sa.CHAR(length=36), nullable=False),
-        sa.Column('user_id', sa.CHAR(length=36), nullable=False),
+        sa.Column('user_id', sa.CHAR(length=36), nullable=True),
         sa.Column('field_name', sa.String(length=150), nullable=False),
         sa.Column('district', sa.String(length=100), nullable=False),
         sa.Column('latitude', sa.Float(), nullable=True),
@@ -58,7 +58,7 @@ def upgrade() -> None:
         sa.Column('notes', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='SET NULL'),
         sa.PrimaryKeyConstraint('id'),
         sa.CheckConstraint('ph >= 0 AND ph <= 14', name='chk_soil_ph_range'),
         sa.CheckConstraint('nitrogen >= 0', name='chk_nitrogen_non_negative'),
@@ -73,7 +73,7 @@ def upgrade() -> None:
     op.create_table(
         'yield_predictions',
         sa.Column('id', sa.CHAR(length=36), nullable=False),
-        sa.Column('user_id', sa.CHAR(length=36), nullable=False),
+        sa.Column('user_id', sa.CHAR(length=36), nullable=True),
         sa.Column('soil_log_id', sa.CHAR(length=36), nullable=True),
         sa.Column('crop', sa.String(length=100), nullable=False),
         sa.Column('season', sa.String(length=50), nullable=True),
@@ -88,7 +88,7 @@ def upgrade() -> None:
         sa.Column('created_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
         sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
         sa.ForeignKeyConstraint(['soil_log_id'], ['soil_logs.id'], ondelete='SET NULL'),
-        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='SET NULL'),
         sa.PrimaryKeyConstraint('id'),
     )
     op.create_index(op.f('ix_yield_predictions_user_id'), 'yield_predictions', ['user_id'], unique=False)

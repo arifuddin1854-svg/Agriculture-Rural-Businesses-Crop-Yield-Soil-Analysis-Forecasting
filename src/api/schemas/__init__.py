@@ -7,6 +7,15 @@ from src.api.schemas.yield_prediction import (
     YieldPredictionRead,
     RecommendationItem,
 )
+from src.api.schemas.soil import (
+    SoilParameters,
+    YieldPredictionRequest,
+    YieldPredictionResponse,
+    RecommendationDetail,
+    CropRecommendationRequest,
+    CropRecommendationItem,
+    CropRecommendationResponse,
+)
 
 __all__ = [
     "HealthResponse",
@@ -23,4 +32,11 @@ __all__ = [
     "YieldPredictionCreate",
     "YieldPredictionRead",
     "RecommendationItem",
+    "SoilParameters",
+    "YieldPredictionRequest",
+    "YieldPredictionResponse",
+    "RecommendationDetail",
+    "CropRecommendationRequest",
+    "CropRecommendationItem",
+    "CropRecommendationResponse",
 ]

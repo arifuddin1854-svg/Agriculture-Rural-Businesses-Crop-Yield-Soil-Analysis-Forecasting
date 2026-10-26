@@ -9,7 +9,7 @@ class YieldPrediction(Base, TimestampMixin):
     __tablename__ = "yield_predictions"
 
     id = Column(GUID(), primary_key=True, default=uuid.uuid4)
-    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     soil_log_id = Column(GUID(), ForeignKey("soil_logs.id", ondelete="SET NULL"), nullable=True, index=True)
 
     # Prediction parameters & metadata
