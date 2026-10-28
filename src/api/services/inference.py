@@ -169,7 +169,8 @@ def predict_yield(
     """
     Performs yield estimation and generates prescriptive recommendations.
     """
-    baseline = CROP_BASELINES.get(crop, DEFAULT_BASELINE)
+    normalized_crop = crop.strip().title() if isinstance(crop, str) else str(crop)
+    baseline = CROP_BASELINES.get(normalized_crop, DEFAULT_BASELINE)
     
     # Calculate factor sensitivity adjustments
     ph_factor = 1.0 - 0.08 * abs(ph - 6.5)

@@ -4,8 +4,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 from fastapi.testclient import TestClient
 
+from src.api.config import settings
 from src.api.main import app
 from src.api.database import Base, get_db
+
+settings.ENVIRONMENT = "testing"
 
 # Create an in-memory SQLite database using StaticPool so all threads/sessions share the same DB
 SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///:memory:"

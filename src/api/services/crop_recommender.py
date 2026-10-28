@@ -5,7 +5,7 @@ to rank and recommend top target crops with prescriptive diagnostic notes.
 """
 
 from typing import Any, Dict, List, Optional
-import numpy as np
+import heapq
 
 # Agronomic optimal parameter lookup table for primary agricultural crops
 # Values represent scientifically established (min, max, ideal_center) agronomic thresholds.
@@ -120,6 +120,17 @@ OPTIMAL_CROP_PROFILES = {
     },
 }
 
+# Pre-computed static optimal range representations to avoid repetitive runtime string formatting
+PRECOMPUTED_OPTIMAL_RANGES = {
+    crop: {
+        "nitrogen_kg_ha": f"{prof['n'][0]:.0f} - {prof['n'][1]:.0f}",
+        "phosphorus_kg_ha": f"{prof['p'][0]:.0f} - {prof['p'][1]:.0f}",
+        "potassium_kg_ha": f"{prof['k'][0]:.0f} - {prof['k'][1]:.0f}",
+        "ph": f"{prof['ph'][0]:.1f} - {prof['ph'][1]:.1f}",
+    }
+    for crop, prof in OPTIMAL_CROP_PROFILES.items()
+}
+
 
 def _calculate_factor_penalty(val: float, low: float, high: float, ideal: float, tolerance_scale: float) -> float:
     """
@@ -127,7 +138,6 @@ def _calculate_factor_penalty(val: float, low: float, high: float, ideal: float,
     If within [low, high], penalty is zero or minimal based on distance to ideal center.
     """
     if low <= val <= high:
-        # Inside the optimal range: mild fine-tuning penalty based on distance to ideal
         return 0.15 * abs(val - ideal) / max(1e-5, (high - low))
     elif val < low:
         dist = low - val
@@ -150,10 +160,10 @@ def evaluate_crop_suitability(
     """
     Evaluates soil parameters against a single crop's optimal lookup profile.
     """
-    n_min, n_max, n_ideal = profile["n"]
-    p_min, p_max, p_ideal = profile["p"]
-    k_min, k_max, k_ideal = profile["k"]
-    ph_min, ph_max, ph_ideal = profile["ph"]
+    (n_min, n_max, n_ideal) = profile["n"]
+    (p_min, p_max, p_ideal) = profile["p"]
+    (k_min, k_max, k_ideal) = profile["k"]
+    (ph_min, ph_max, ph_ideal) = profile["ph"]
 
     # Calculate individual parameter penalties
     n_pen = _calculate_factor_penalty(nitrogen, n_min, n_max, n_ideal, tolerance_scale=0.6)
@@ -161,24 +171,29 @@ def evaluate_crop_suitability(
     k_pen = _calculate_factor_penalty(potassium, k_min, k_max, k_ideal, tolerance_scale=0.6)
     ph_pen = _calculate_factor_penalty(ph, ph_min, ph_max, ph_ideal, tolerance_scale=0.3)
 
-    # Weights: Soil chemistry (NPK + pH) represents primary agronomic drivers
-    weights = [0.25, 0.25, 0.25, 0.25]
-    penalties = [n_pen, p_pen, k_pen, ph_pen]
-
-    if rainfall is not None:
+    if rainfall is not None and temperature is not None:
+        r_min, r_max, r_ideal = profile["rain"]
+        t_min, t_max, t_ideal = profile["temp"]
+        r_pen = _calculate_factor_penalty(rainfall, r_min, r_max, r_ideal, tolerance_scale=0.5)
+        t_pen = _calculate_factor_penalty(temperature, t_min, t_max, t_ideal, tolerance_scale=0.4)
+        composite_penalty = (
+            0.20 * n_pen + 0.20 * p_pen + 0.20 * k_pen + 0.20 * ph_pen + 0.10 * r_pen + 0.10 * t_pen
+        )
+    elif rainfall is not None:
         r_min, r_max, r_ideal = profile["rain"]
         r_pen = _calculate_factor_penalty(rainfall, r_min, r_max, r_ideal, tolerance_scale=0.5)
-        penalties.append(r_pen)
-        weights = [0.22, 0.22, 0.22, 0.22, 0.12]
-
-    if temperature is not None:
+        composite_penalty = (
+            0.22 * n_pen + 0.22 * p_pen + 0.22 * k_pen + 0.22 * ph_pen + 0.12 * r_pen
+        )
+    elif temperature is not None:
         t_min, t_max, t_ideal = profile["temp"]
         t_pen = _calculate_factor_penalty(temperature, t_min, t_max, t_ideal, tolerance_scale=0.4)
-        penalties.append(t_pen)
-        # Normalize weights
-        weights = [0.20, 0.20, 0.20, 0.20, 0.10, 0.10]
+        composite_penalty = (
+            0.22 * n_pen + 0.22 * p_pen + 0.22 * k_pen + 0.22 * ph_pen + 0.12 * t_pen
+        )
+    else:
+        composite_penalty = 0.25 * (n_pen + p_pen + k_pen + ph_pen)
 
-    composite_penalty = sum(w * p for w, p in zip(weights, penalties))
     suitability_score = round(max(0.0, min(100.0, (1.0 - composite_penalty) * 100.0)), 2)
 
     # Classify match status
@@ -212,12 +227,7 @@ def evaluate_crop_suitability(
         "crop": crop_name,
         "suitability_score": suitability_score,
         "match_status": match_status,
-        "optimal_ranges": {
-            "nitrogen_kg_ha": f"{n_min:.0f} - {n_max:.0f}",
-            "phosphorus_kg_ha": f"{p_min:.0f} - {p_max:.0f}",
-            "potassium_kg_ha": f"{k_min:.0f} - {k_max:.0f}",
-            "ph": f"{ph_min:.1f} - {ph_max:.1f}",
-        },
+        "optimal_ranges": PRECOMPUTED_OPTIMAL_RANGES[crop_name],
         "diagnostic_notes": diagnostic_notes,
     }
 
@@ -233,10 +243,10 @@ def recommend_top_crops(
 ) -> List[Dict[str, Any]]:
     """
     Evaluates all crop profiles in the lookup table and returns top_k ranked candidates.
+    Uses heapq.nlargest for O(N log k) top candidates extraction.
     """
-    evaluations = []
-    for crop_name, profile in OPTIMAL_CROP_PROFILES.items():
-        eval_result = evaluate_crop_suitability(
+    evaluations = [
+        evaluate_crop_suitability(
             crop_name=crop_name,
             profile=profile,
             nitrogen=nitrogen,
@@ -246,15 +256,14 @@ def recommend_top_crops(
             rainfall=rainfall,
             temperature=temperature,
         )
-        evaluations.append(eval_result)
+        for crop_name, profile in OPTIMAL_CROP_PROFILES.items()
+    ]
 
-    # Sort descending by suitability score
-    evaluations.sort(key=lambda x: x["suitability_score"], reverse=True)
+    # Efficiently pick top_k by suitability_score
+    top_candidates = heapq.nlargest(top_k, evaluations, key=lambda x: x["suitability_score"])
 
     # Assign ranks
-    ranked_top = []
-    for rank, item in enumerate(evaluations[:top_k], start=1):
+    for rank, item in enumerate(top_candidates, start=1):
         item["rank"] = rank
-        ranked_top.append(item)
 
-    return ranked_top
+    return top_candidates

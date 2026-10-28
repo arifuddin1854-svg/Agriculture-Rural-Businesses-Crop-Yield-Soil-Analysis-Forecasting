@@ -48,9 +48,9 @@ def log_assessment_and_prediction(
     """
     valid_user_id: Optional[UUID] = None
     if user_id:
-        user = db.query(User).filter(User.id == user_id).first()
-        if user:
-            valid_user_id = user.id
+        user_row = db.query(User.id).filter(User.id == user_id).first()
+        if user_row:
+            valid_user_id = user_row[0]
         else:
             logger.warning(
                 f"Provided user_id {user_id} not found in database; logging with anonymous farmer context."
@@ -91,10 +91,7 @@ def log_assessment_and_prediction(
         input_features=input_features,
     )
     db.add(yield_record)
-
     db.commit()
-    db.refresh(soil_log)
-    db.refresh(yield_record)
 
     logger.info(
         f"[DB Logging] Successfully persisted SoilLog (ID={soil_log.id}) and "
@@ -120,9 +117,9 @@ def log_soil_assessment(
     """
     valid_user_id: Optional[UUID] = None
     if user_id:
-        user = db.query(User).filter(User.id == user_id).first()
-        if user:
-            valid_user_id = user.id
+        user_row = db.query(User.id).filter(User.id == user_id).first()
+        if user_row:
+            valid_user_id = user_row[0]
 
     soil_log = SoilLog(
         user_id=valid_user_id,
@@ -136,7 +133,6 @@ def log_soil_assessment(
     )
     db.add(soil_log)
     db.commit()
-    db.refresh(soil_log)
 
     logger.info(f"[DB Logging] Logged standalone SoilLog ID={soil_log.id}")
     return soil_log

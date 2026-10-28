@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing Axlero Agri-Tech API services...")
     # In development/test mode, create tables if they do not exist
     try:
-        if settings.ENVIRONMENT in ["development", "testing"]:
+        if settings.ENVIRONMENT == "development":
             logger.info("Verifying/creating database tables...")
             Base.metadata.create_all(bind=engine)
     except Exception as exc:
