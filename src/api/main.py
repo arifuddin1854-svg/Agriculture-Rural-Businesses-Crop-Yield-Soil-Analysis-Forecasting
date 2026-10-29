@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.config import settings
 from src.api.database import engine, Base
+import src.api.models  # Registers all models with Base.metadata
 from src.api.routes.health import router as health_router
 from src.api.routes.users import router as users_router
 from src.api.routes.soil_logs import router as soil_logs_router

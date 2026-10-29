@@ -92,3 +92,5 @@ models/*
 *.pkl
 *.h5
 *.onnx
+*.db
+*.sqlite3
