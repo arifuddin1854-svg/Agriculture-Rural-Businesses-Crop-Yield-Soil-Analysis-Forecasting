@@ -1,0 +1,99 @@
+{
+  "timestamp": "2026-10-10T10:07:18.200613",
+  "summary": {
+    "input_yield_records": 225,
+    "fused_records_count": 225,
+    "columns_count": 35,
+    "null_values_count": 0,
+    "districts_count": 15,
+    "crops_count": 5,
+    "years_count": 5,
+    "columns": [
+      "district_id",
+      "year",
+      "crop_type",
+      "planted_area_ha",
+      "production_mt",
+      "crop_yield_mt_ha",
+      "soil_type",
+      "nitrogen_kg_ha",
+      "phosphorus_kg_ha",
+      "potassium_kg_ha",
+      "soil_ph",
+      "organic_matter_pct",
+      "electrical_conductivity_ds_m",
+      "growing_season_days",
+      "cumulative_rainfall_mm",
+      "mean_daily_rainfall_mm",
+      "rainy_days_count",
+      "heavy_rain_days_count",
+      "max_daily_rainfall_mm",
+      "consecutive_dry_days_max",
+      "gdd_cumulative",
+      "mean_temp_max",
+      "extreme_temp_max",
+      "mean_temp_min",
+      "extreme_temp_min",
+      "mean_diurnal_range",
+      "heat_stress_days",
+      "extreme_heat_days",
+      "cold_stress_days",
+      "mean_relative_humidity",
+      "high_humidity_days",
+      "cumulative_solar_radiation_mj",
+      "mean_solar_radiation_mj",
+      "mean_vpd_kpa",
+      "high_vpd_stress_days"
+    ],
+    "integrity_check": {
+      "integrity_passed": true,
+      "yield_districts_count": 15,
+      "soil_districts_count": 15,
+      "weather_districts_count": 15,
+      "is_phenological_weather": true,
+      "issues": []
+    }
+  },
+  "crop_level_breakdown": {
+    "Cotton": {
+      "record_count": 39,
+      "mean_yield_mt_ha": 2.11,
+      "std_yield_mt_ha": 0.52,
+      "mean_area_ha": 1619.4,
+      "mean_gdd": 3282.4,
+      "mean_rainfall_mm": 1123.9
+    },
+    "Maize": {
+      "record_count": 44,
+      "mean_yield_mt_ha": 5.63,
+      "std_yield_mt_ha": 0.6,
+      "mean_area_ha": 1878.5,
+      "mean_gdd": 3315.6,
+      "mean_rainfall_mm": 1042.2
+    },
+    "Rice": {
+      "record_count": 53,
+      "mean_yield_mt_ha": 4.12,
+      "std_yield_mt_ha": 0.55,
+      "mean_area_ha": 2173.4,
+      "mean_gdd": 3072.7,
+      "mean_rainfall_mm": 1089.5
+    },
+    "Soybean": {
+      "record_count": 40,
+      "mean_yield_mt_ha": 2.68,
+      "std_yield_mt_ha": 0.49,
+      "mean_area_ha": 2023.4,
+      "mean_gdd": 2618.4,
+      "mean_rainfall_mm": 996.1
+    },
+    "Wheat": {
+      "record_count": 49,
+      "mean_yield_mt_ha": 4.39,
+      "std_yield_mt_ha": 0.6,
+      "mean_area_ha": 1854.5,
+      "mean_gdd": 2431.7,
+      "mean_rainfall_mm": 237.6
+    }
+  }
+}

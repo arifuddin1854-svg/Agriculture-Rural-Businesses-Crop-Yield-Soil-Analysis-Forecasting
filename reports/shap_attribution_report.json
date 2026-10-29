@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-10-21T15:18:20.866151",
+  "model_name": "Random_Forest",
+  "total_features": 57,
+  "top_features_ranked": [
+    {
+      "feature": "crop_type_Maize",
+      "mean_abs_shap": 0.5707800600319197,
+      "domain": "Agronomic Baseline / Spatial"
+    },
+    {
+      "feature": "cumulative_solar_radiation_mj",
+      "mean_abs_shap": 0.27941320448689067,
+      "domain": "Exogenous (Meteorological)"
+    },
+    {
+      "feature": "crop_type_Soybean",
+      "mean_abs_shap": 0.21680054110798838,
+      "domain": "Agronomic Baseline / Spatial"
+    },
+    {
+      "feature": "mean_relative_humidity",
+      "mean_abs_shap": 0.11514596995011182,
+      "domain": "Exogenous (Meteorological)"
+    },
+    {
+      "feature": "crop_type_Cotton",
+      "mean_abs_shap": 0.08740220742108845,
+      "domain": "Agronomic Baseline / Spatial"
+    },
+    {
+      "feature": "growing_season_days",
+      "mean_abs_shap": 0.07355809676252971,
+      "domain": "Agronomic Baseline / Spatial"
+    },
+    {
+      "feature": "crop_type_Rice",
+      "mean_abs_shap": 0.048417839649077005,
+      "domain": "Agronomic Baseline / Spatial"
+    },
+    {
+      "feature": "mean_diurnal_range",
+      "mean_abs_shap": 0.035045046886100564,
+      "domain": "Exogenous (Meteorological)"
+    },
+    {
+      "feature": "mean_temp_min",
+      "mean_abs_shap": 0.03241804328442621,
+      "domain": "Exogenous (Meteorological)"
+    },
+    {
+      "feature": "mean_temp_max",
+      "mean_abs_shap": 0.032036610076201524,
+      "domain": "Exogenous (Meteorological)"
+    }
+  ],
+  "domain_breakdown": {
+    "Agronomic Baseline / Spatial": 1.0567734790652137,
+    "Controllable (Soil / Nutrient)": 0.0889746390699576,
+    "Exogenous (Meteorological)": 0.6538469483752767
+  }
+}
