@@ -1,8 +1,25 @@
-"""
-Real-time Inference Service for Crop Yield Forecasting and SHAP Agronomic Diagnostics.
-"""
+import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from typing import Any, Dict, List, Tuple
+logger = logging.getLogger("axlero_agri_api.inference_service")
+
+_ml_engine = None
+
+
+def get_ml_inference_engine():
+    """Lazily load and cache the production trained ML inference engine."""
+    global _ml_engine
+    if _ml_engine is None:
+        model_path = Path("models/best_yield_regressor.joblib")
+        if model_path.exists():
+            try:
+                from src.inference import CropYieldInferenceEngine
+                _ml_engine = CropYieldInferenceEngine(model_path)
+                logger.info("Successfully loaded production ML CropYieldInferenceEngine for REST API.")
+            except Exception as e:
+                logger.warning(f"Could not load ML CropYieldInferenceEngine: {e}")
+    return _ml_engine
 
 
 CROP_BASELINES = {
@@ -187,6 +204,35 @@ def predict_yield(
     )
 
     final_predicted = round(estimated_baseline + potential_gain, 2)
+    model_version = "axlero_rf_ensemble_v1.0.0"
+    confidence_score = 0.934
+
+    # Integrate with production ML checkpoint if loaded
+    engine = get_ml_inference_engine()
+    if engine is not None:
+        try:
+            raw_input = {
+                "crop": crop,
+                "crop_type": crop,
+                "nitrogen": nitrogen,
+                "phosphorus": phosphorus,
+                "potassium": potassium,
+                "ph": ph,
+                "soil_ph": ph,
+                "rainfall": rainfall,
+                "temp_max": temp_max,
+            }
+            ml_res = engine.predict_single(raw_input)
+            pred_from_ml = float(ml_res.get("predicted_yield_mt_ha", 0.0))
+            if pred_from_ml > 0:
+                final_predicted = round(pred_from_ml, 2)
+                estimated_baseline = round(max(0.1, final_predicted - potential_gain), 2)
+                model_version = f"axlero_{engine.model_name.lower()}_v1.0.0"
+                std_err = float(ml_res.get("std_error", 0.2))
+                confidence_score = round(max(0.6, min(0.99, 1.0 - (std_err / max(1.0, final_predicted)))), 3)
+        except Exception as err:
+            logger.warning(f"Error evaluating ML engine: {err}. Using calibrated baseline calculation.")
+
     shap_vals = compute_shap_attributions(
         crop=crop,
         nitrogen=nitrogen,
@@ -202,8 +248,8 @@ def predict_yield(
         "predicted_yield": final_predicted,
         "baseline_yield": estimated_baseline,
         "potential_gain": potential_gain,
-        "confidence_score": 0.934,
-        "model_version": "axlero_rf_ensemble_v1.0.0",
+        "confidence_score": confidence_score,
+        "model_version": model_version,
         "recommendations": recommendations,
         "shap_values": shap_vals,
         "input_features": {
