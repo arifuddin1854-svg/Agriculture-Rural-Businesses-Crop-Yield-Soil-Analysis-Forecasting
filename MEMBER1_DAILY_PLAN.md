@@ -28,6 +28,7 @@
 | **Day 9** | **Spatial Block CV & Ensemble Modeling** | • Enforce 5-Fold Spatial Group-KFold (by District) & Leave-One-Year-Out (LOYO) CV.<br/>• Benchmark Ridge, Random Forest, Gradient Boosting, HistGradientBoosting.<br/>• Hyperparameter tuning and model checkpoint export. | • `src/models.py`<br/>• `models/best_yield_regressor.joblib`<br/>• `notebooks/03_model_training_evaluation.ipynb`<br/>• `tests/test_models.py` | **✅ Completed** |
 | **Day 10** | **SHAP Factor Attribution & Prescriptive Advisory** | • SHAP TreeExplainer global attribution.<br/>• Decouple controllable inputs (N, P, K, pH) from exogenous weather.<br/>• Prescriptive farmer advisory CLI with counterfactual yield gains. | • `src/shap_engine.py`<br/>• `src/advisor.py`<br/>• `notebooks/04_shap_explainability.ipynb`<br/>• `tests/test_advisor.py` | **✅ Completed** |
 | **Day 11** | **Production Real-Time Inference Engine & REST API** | • Real-time inference engine with automated feature extraction & schema alignment.<br/>• Uncertainty quantification & 95% Confidence Intervals via Random Forest ensemble variance.<br/>• Multi-factor agronomic risk profiling & counterfactual advisory integration.<br/>• High-throughput batch prediction pipeline CLI.<br/>• Standalone REST API service (`/health`, `/model/metadata`, `/api/v1/predict`, `/api/v1/prescribe`, `/api/v1/batch`). | • `src/inference.py`<br/>• `run_batch_inference.py`<br/>• `src/api_service.py`<br/>• `data/processed/batch_predictions.csv`<br/>• `data/processed/batch_predictions.parquet`<br/>• `reports/batch_inference_report.md` & `.json`<br/>• `tests/test_inference.py` | **✅ Completed** |
+| **Day 12** | **Interactive Agronomic Web Dashboard & Model Drift Monitoring** | • Interactive decision-support Web Dashboard (Vanilla CSS, dark mode, glassmorphism).<br/>• Real-time What-If Counterfactual Simulator with live financial ROI and yield gain gauges.<br/>• Covariate drift detector with Population Stability Index (PSI) & Kolmogorov-Smirnov (KS) tests.<br/>• Integrated HTTP dashboard & asset serving with `/api/v1/monitoring` endpoint. | • `static/index.html`<br/>• `static/style.css`<br/>• `static/app.js`<br/>• `src/monitoring.py`<br/>• `reports/drift_monitoring_report.json` & `.md`<br/>• `tests/test_monitoring.py` | **✅ Completed** |
 
 ---
 
@@ -198,11 +199,27 @@
 4. **Unit & Integration Test Suite**:
    - **[tests/test_inference.py](file:///d:/crop%20yeild%20detection/tests/test_inference.py)**: 9 comprehensive tests covering feature vector alignment, interval consistency ($lower \le pred \le upper$), acidity prescriptions, risk profiling, batch inference, and REST API handlers.
 
+### 🗓️ Day 12: Interactive Agronomic Web Dashboard & Covariate Drift Monitoring
+1. **[static/index.html](file:///d:/crop%20yeild%20detection/static/index.html)**, **[static/style.css](file:///d:/crop%20yeild%20detection/static/style.css)**, & **[static/app.js](file:///d:/crop%20yeild%20detection/static/app.js)**:
+   - **Interactive Web Application**: Responsive agricultural decision-support platform designed with modern dark mode, emerald/agri accents, and glassmorphic cards.
+   - **Farm Telemetry Profiler**: Real-time yield forecast with interactive 95% confidence intervals, production forecasts, and environmental stress gauges (soil acidity, drought, heat shock, NPK stoichiometry).
+   - **What-If Counterfactual Simulator**: Interactive sliders for pH amendment, N top-dressing, and organic matter targets with live financial ROI and revenue calculations.
+   - **Regional Cooperative Analytics**: Filterable, searchable table covering 225 regional farm predictions with client-side CSV export capability.
+2. **[src/monitoring.py](file:///d:/crop%20yeild%20detection/src/monitoring.py)**:
+   - **Population Stability Index (PSI)**: Continuous quantile binning monitoring key macronutrient ($N, P, K$, pH, SOM) and meteorological covariates.
+   - **Kolmogorov-Smirnov (KS) Testing**: Two-sample distribution divergence tracking against the baseline training distribution.
+   - **Automated Audit Reports**: Generates `reports/drift_monitoring_report.json` and `reports/drift_monitoring_report.md`.
+3. **[src/api_service.py](file:///d:/crop%20yeild%20detection/src/api_service.py)**:
+   - Full static asset serving (`/`, `/dashboard`, `/style.css`, `/app.js`).
+   - Integrated live monitoring endpoint: `GET /api/v1/monitoring`.
+4. **Unit & Integration Test Suite**:
+   - **[tests/test_monitoring.py](file:///d:/crop%20yeild%20detection/tests/test_monitoring.py)**: 8 passing tests validating PSI calculation, KS drift alerts, report emission, HTML/CSS/JS asset serving, and monitoring endpoints.
+
 ---
 
 ## 🎯 Final Project Milestone & Test Suite Status
-- ✅ **11 / 11 Sprint Days Completed**: 100% full lifecycle implementation from raw data ingestion to production REST API serving.
-- ✅ **Test Suite Coverage**: **38 / 38 automated unit & integration tests passing (100% pass rate)**.
-- ✅ **Production Artifacts**: `data/processed/unified_agri_dataset.csv`, `data/processed/train_features.csv`, `models/best_yield_regressor.joblib`, and `data/processed/batch_predictions.csv`.
-- ✅ **Publication Visuals & Audit Reports**: 10 high-resolution analytical figures in `reports/figures/` + 8 automated validation and audit reports in `reports/`.
+- ✅ **12 / 12 Sprint Days Completed**: 100% full lifecycle implementation from raw data ingestion to interactive web dashboard and drift monitoring.
+- ✅ **Test Suite Coverage**: **46 / 46 automated unit & integration tests passing (100% pass rate)**.
+- ✅ **Production Artifacts**: `static/` dashboard suite, `data/processed/unified_agri_dataset.csv`, `data/processed/train_features.csv`, `models/best_yield_regressor.joblib`, and `data/processed/batch_predictions.csv`.
+- ✅ **Publication Visuals & Audit Reports**: 10 high-resolution analytical figures in `reports/figures/` + 9 automated validation and audit reports in `reports/`.
 - ✅ **Jupyter Notebooks**: Complete 4-notebook suite (`01` through `04`) in `notebooks/`.

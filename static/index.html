@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Axlero Agri-Tech | Crop Yield & Soil Analysis Forecasting Platform</title>
+  <meta name="description" content="AI-powered multi-source agricultural decision support platform fusing weather time-series, soil chemistry, and historical crop yields for spatial yield prediction and prescriptive agronomic advisory.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-top"></div>
+  <div class="ambient-glow glow-bottom"></div>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#3fb950"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-title">AXLERO AGRI-TECH</h1>
+          <p class="brand-subtitle">Crop Yield & Soil Forecasting Engine</p>
+        </div>
+        <span class="badge badge-version">v1.2.0 Production</span>
+      </div>
+
+      <div class="header-status-group">
+        <div class="status-pill status-pill-active" id="model-status-pill">
+          <span class="status-dot"></span>
+          <span class="status-text">Random Forest Spatial Model Active (R² = 0.803)</span>
+        </div>
+        <button id="btn-quick-demo" class="btn btn-secondary btn-sm" title="Populate realistic sample farm inputs">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          Load Demo Farm
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs-wrapper">
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="tab-single" id="tab-btn-single">
+          <span class="tab-icon">🌾</span> Single Farm Forecast & Advisory
+        </button>
+        <button class="nav-tab" data-tab="tab-simulator" id="tab-btn-simulator">
+          <span class="tab-icon">🧪</span> What-If Soil Simulator
+        </button>
+        <button class="nav-tab" data-tab="tab-batch" id="tab-btn-batch">
+          <span class="tab-icon">📊</span> Regional Cooperative Analytics
+        </button>
+        <button class="nav-tab" data-tab="tab-drift" id="tab-btn-drift">
+          <span class="tab-icon">🛡️</span> Covariate Drift & Model Health
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <!-- ========================================================================= -->
+    <!-- TAB 1: SINGLE FARM FORECAST & ADVISORY -->
+    <!-- ========================================================================= -->
+    <section id="tab-single" class="tab-panel active">
+      <div class="dashboard-grid">
+        
+        <!-- Left Column: Input Form -->
+        <div class="panel card form-panel">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">🌱 Farm Telemetry & Soil Profile</h2>
+              <p class="card-desc">Enter soil laboratory results and farm boundary parameters.</p>
+            </div>
+            <button type="button" id="btn-reset-form" class="btn-text">Reset</button>
+          </div>
+
+          <form id="farm-forecast-form">
+            <!-- Crop Selection Cards -->
+            <div class="form-section">
+              <label class="form-label">Target Crop Species</label>
+              <div class="crop-grid" id="crop-selector-grid">
+                <label class="crop-card selected" data-crop="Wheat">
+                  <input type="radio" name="crop_type" value="Wheat" checked>
+                  <span class="crop-emoji">🌾</span>
+                  <span class="crop-name">Wheat</span>
+                  <span class="crop-meta">Rabi (150d)</span>
+                </label>
+                <label class="crop-card" data-crop="Rice">
+                  <input type="radio" name="crop_type" value="Rice">
+                  <span class="crop-emoji">🍚</span>
+                  <span class="crop-name">Rice</span>
+                  <span class="crop-meta">Kharif (125d)</span>
+                </label>
+                <label class="crop-card" data-crop="Maize">
+                  <input type="radio" name="crop_type" value="Maize">
+                  <span class="crop-emoji">🌽</span>
+                  <span class="crop-name">Maize</span>
+                  <span class="crop-meta">Kharif (115d)</span>
+                </label>
+                <label class="crop-card" data-crop="Soybean">
+                  <input type="radio" name="crop_type" value="Soybean">
+                  <span class="crop-emoji">🌱</span>
+                  <span class="crop-name">Soybean</span>
+                  <span class="crop-meta">Kharif (110d)</span>
+                </label>
+                <label class="crop-card" data-crop="Cotton">
+                  <input type="radio" name="crop_type" value="Cotton">
+                  <span class="crop-emoji">☁️</span>
+                  <span class="crop-name">Cotton</span>
+                  <span class="crop-meta">Annual (165d)</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Geographic & Soil Classification -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="district_id" class="form-label">Agro-Climatic District</label>
+                <select id="district_id" name="district_id" class="form-select">
+                  <option value="DIST_101">DIST_101 (Central Plains - High Rain)</option>
+                  <option value="DIST_102">DIST_102 (Semi-Arid Basin)</option>
+                  <option value="DIST_103">DIST_103 (Western Plateau)</option>
+                  <option value="DIST_104">DIST_104 (Northern River Valley)</option>
+                  <option value="DIST_105">DIST_105 (Southern Loam Belt)</option>
+                  <option value="DIST_106">DIST_106 (Eastern Coastal Plain)</option>
+                  <option value="DIST_107">DIST_107 (Highland Terrace)</option>
+                  <option value="DIST_108">DIST_108 (Central Alluvial Zone)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="soil_type" class="form-label">Soil Classification</label>
+                <select id="soil_type" name="soil_type" class="form-select">
+                  <option value="Alluvial">Alluvial (High Fertility)</option>
+                  <option value="Black Soil">Black Soil (High Clay Retention)</option>
+                  <option value="Clay Loam">Clay Loam (Balanced Porosity)</option>
+                  <option value="Laterite">Laterite (Acidic Leached)</option>
+                  <option value="Red Sandy Loam">Red Sandy Loam (Rapid Drainage)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="planted_area_ha" class="form-label">Planted Area (Ha)</label>
+                <input type="number" id="planted_area_ha" name="planted_area_ha" value="65.0" min="1" max="10000" step="0.5" class="form-input">
+              </div>
+            </div>
+
+            <!-- Soil Macronutrient Sliders -->
+            <div class="form-section">
+              <div class="section-title-row">
+                <span class="section-subtitle">Macronutrient Chemistry (N-P-K)</span>
+                <span class="section-helper">Target 4:2:1 Stoichiometric Ratio</span>
+              </div>
+
+              <!-- Nitrogen -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="field-label">Nitrogen (N)</span>
+                  <span class="field-value"><strong id="val-nitrogen">115.0</strong> kg/ha</span>
+                </div>
+                <input type="range" id="nitrogen_kg_ha" name="nitrogen_kg_ha" min="20" max="220" value="115.0" step="1" class="form-range">
+                <div class="range-limits"><span>20 kg/ha (Low)</span><span>Opt: 110-130</span><span>220 kg/ha (High)</span></div>
+              </div>
+
+              <!-- Phosphorus -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="field-label">Phosphorus (P)</span>
+                  <span class="field-value"><strong id="val-phosphorus">48.0</strong> kg/ha</span>
+                </div>
+                <input type="range" id="phosphorus_kg_ha" name="phosphorus_kg_ha" min="10" max="100" value="48.0" step="1" class="form-range">
+                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 45-60</span><span>100 kg/ha</span></div>
+              </div>
+
+              <!-- Potassium -->
+              <div class="slider-field">
+                <div class="slider-header">
+                  <span class="field-label">Potassium (K)</span>
+                  <span class="field-value"><strong id="val-potassium">55.0</strong> kg/ha</span>
+                </div>
+                <input type="range" id="potassium_kg_ha" name="potassium_kg_ha" min="10" max="150" value="55.0" step="1" class="form-range">
+                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 45-70</span><span>150 kg/ha</span></div>
+              </div>
+            </div>
+
+            <!-- Soil Reaction (pH) & Organic Matter -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="soil_ph" class="form-label">
+                  Soil pH <span id="ph-badge" class="badge badge-warning">5.40 (Acidic)</span>
+                </label>
+                <input type="range" id="soil_ph" name="soil_ph" min="4.0" max="9.0" value="5.40" step="0.05" class="form-range">
+                <div class="range-limits"><span>4.0 (Acidic)</span><span>6.5 (Neutral)</span><span>9.0 (Alkaline)</span></div>
+              </div>
+              <div class="form-group">
+                <label for="organic_matter_pct" class="form-label">Organic Matter (SOM %)</label>
+                <input type="number" id="organic_matter_pct" name="organic_matter_pct" value="1.6" min="0.2" max="6.0" step="0.1" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="electrical_conductivity_ds_m" class="form-label">EC Salinity (dS/m)</label>
+                <input type="number" id="electrical_conductivity_ds_m" name="electrical_conductivity_ds_m" value="0.45" min="0.05" max="4.0" step="0.05" class="form-input">
+              </div>
+            </div>
+
+            <!-- Weather Indicators Collapsible -->
+            <details class="accordion-details" open>
+              <summary class="accordion-summary">
+                <span>🌦️ Meteorology & Growing Season Conditions</span>
+                <span class="accordion-toggle">District Defaults Applied</span>
+              </summary>
+              <div class="accordion-content">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="cumulative_rainfall_mm" class="form-label">Cumulative Rain (mm)</label>
+                    <input type="number" id="cumulative_rainfall_mm" name="cumulative_rainfall_mm" value="820.0" min="50" max="3000" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="mean_temp_max" class="form-label">Mean Max Temp (°C)</label>
+                    <input type="number" id="mean_temp_max" name="mean_temp_max" value="33.2" min="15" max="48" step="0.1" class="form-input">
+                  </div>
+                  <div class="form-group">
+                    <label for="mean_vpd_kpa" class="form-label">Vapor Pressure Deficit (kPa)</label>
+                    <input type="number" id="mean_vpd_kpa" name="mean_vpd_kpa" value="1.31" min="0.4" max="3.5" step="0.01" class="form-input">
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <button type="submit" id="btn-submit-forecast" class="btn btn-primary btn-block btn-lg">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <span>Compute Real-Time Yield Forecast</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Column: Results & Advisory -->
+        <div class="results-column">
+          <!-- Primary KPI Banner -->
+          <div class="panel card hero-kpi-card" id="forecast-kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-tag" id="kpi-crop-badge">Wheat Forecast</span>
+              <span class="kpi-confidence" id="kpi-ci-spread">95% Confidence Interval: ±0.68 MT/Ha</span>
+            </div>
+
+            <div class="kpi-body">
+              <div class="kpi-main-metric">
+                <div class="kpi-value-group">
+                  <span class="kpi-number" id="kpi-predicted-yield">4.18</span>
+                  <span class="kpi-unit">MT / Ha</span>
+                </div>
+                <div class="kpi-interval-pill" id="kpi-interval-pill">
+                  Range: <strong id="kpi-lower-bound">3.50</strong> — <strong id="kpi-upper-bound">4.86</strong> MT/Ha
+                </div>
+              </div>
+
+              <div class="kpi-secondary-stats">
+                <div class="stat-box">
+                  <span class="stat-label">Total Harvest Production</span>
+                  <span class="stat-value" id="kpi-total-production">271.7 MT</span>
+                  <span class="stat-sub" id="kpi-production-range">227.5 – 315.9 MT</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label">Agronomic Risk Status</span>
+                  <span class="risk-badge risk-badge-moderate" id="kpi-risk-badge">MODERATE RISK</span>
+                  <span class="stat-sub" id="kpi-risk-factor-count">1 Trigger Flagged</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Environmental Stress Gauges -->
+          <div class="panel card stress-panel">
+            <h3 class="panel-subtitle">⚡ Multi-Factor Stress Index Diagnostics</h3>
+            <div class="stress-grid">
+              <div class="stress-meter-card">
+                <div class="meter-header">
+                  <span>Soil Reaction Stress</span>
+                  <strong id="stress-ph-val">5.40 pH</strong>
+                </div>
+                <div class="meter-bar"><div class="meter-fill meter-fill-warning" id="bar-ph" style="width: 65%;"></div></div>
+                <span class="meter-meta" id="desc-ph">Soil Acidity Stress (pH &lt; 5.8)</span>
+              </div>
+
+              <div class="stress-meter-card">
+                <div class="meter-header">
+                  <span>Drought Vulnerability</span>
+                  <strong id="stress-drought-val">0.033</strong>
+                </div>
+                <div class="meter-bar"><div class="meter-fill meter-fill-success" id="bar-drought" style="width: 30%;"></div></div>
+                <span class="meter-meta" id="desc-drought">Low Dry Spell Exposure</span>
+              </div>
+
+              <div class="stress-meter-card">
+                <div class="meter-header">
+                  <span>Heat Shock Frequency</span>
+                  <strong id="stress-heat-val">5.0 Days</strong>
+                </div>
+                <div class="meter-bar"><div class="meter-fill meter-fill-info" id="bar-heat" style="width: 40%;"></div></div>
+                <span class="meter-meta" id="desc-heat">Tmax &ge; 35&deg;C Threshold</span>
+              </div>
+
+              <div class="stress-meter-card">
+                <div class="meter-header">
+                  <span>NPK Stoichiometric Balance</span>
+                  <strong id="stress-npk-val">0.085</strong>
+                </div>
+                <div class="meter-bar"><div class="meter-fill meter-fill-success" id="bar-npk" style="width: 25%;"></div></div>
+                <span class="meter-meta" id="desc-npk">Balanced 4:2:1 Ratio</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prescriptive Recommendations -->
+          <div class="panel card advisory-panel">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">🧪 Actionable Prescriptive Agronomic Amendments</h3>
+                <p class="card-desc">Counterfactual interventions simulated to maximize harvest yield upside.</p>
+              </div>
+              <span class="badge badge-success" id="kpi-upside-badge">+6.5% Yield Upside</span>
+            </div>
+
+            <div class="prescriptions-list" id="prescriptions-list-container">
+              <!-- Dynamically populated prescription cards -->
+              <div class="prescription-card priority-high">
+                <div class="rx-header">
+                  <span class="rx-tag tag-high">HIGH PRIORITY</span>
+                  <span class="rx-gain">+0.25 MT/Ha (+6.5%)</span>
+                </div>
+                <h4 class="rx-title">Apply Agricultural Limestone (CaCO3)</h4>
+                <p class="rx-dosage"><strong>Dosage:</strong> 2.0 tons/ha applied 4-6 weeks prior to sowing</p>
+                <p class="rx-target"><strong>Target:</strong> Elevate root-zone pH from 5.4 to 6.5 to eliminate aluminum toxicity and unlock bound phosphorus.</p>
+              </div>
+
+              <div class="prescription-card priority-medium">
+                <div class="rx-header">
+                  <span class="rx-tag tag-medium">MEDIUM PRIORITY</span>
+                  <span class="rx-gain">+0.15 MT/Ha (+3.9%)</span>
+                </div>
+                <h4 class="rx-title">Biochar &amp; Green Manure Incorporation</h4>
+                <p class="rx-dosage"><strong>Dosage:</strong> Incorporate 6-8 MT/ha cover crop biomass or enriched vermicompost</p>
+                <p class="rx-target"><strong>Target:</strong> Elevate soil organic matter from 1.6% to 2.5% to boost cation exchange capacity (CEC).</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 2: WHAT-IF SOIL SIMULATOR -->
+    <!-- ========================================================================= -->
+    <section id="tab-simulator" class="tab-panel">
+      <div class="panel card simulator-hero">
+        <div class="sim-header">
+          <div>
+            <h2 class="card-title">🧪 Interactive Counterfactual Soil Optimizer</h2>
+            <p class="card-desc">Move the amendment sliders to simulate real-time yield responses and financial returns.</p>
+          </div>
+          <div class="sim-kpi-pill">
+            <span>Projected Yield Gain:</span>
+            <strong id="sim-gain-pct" class="text-success">+11.2%</strong>
+          </div>
+        </div>
+
+        <div class="simulator-layout">
+          <div class="sim-controls-card">
+            <h3 class="panel-subtitle">Interactive Amendment Sliders</h3>
+            
+            <div class="slider-field">
+              <div class="slider-header">
+                <span class="field-label">Amended Soil pH</span>
+                <span class="field-value"><strong id="sim-val-ph">6.50</strong></span>
+              </div>
+              <input type="range" id="sim-slider-ph" min="4.5" max="8.5" value="6.50" step="0.1" class="form-range">
+              <div class="range-limits"><span>4.5 (Acidic)</span><span>6.5 (Optimal)</span><span>8.5 (Alkaline)</span></div>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-header">
+                <span class="field-label">Supplemental Nitrogen Top-Dress</span>
+                <span class="field-value"><strong id="sim-val-n">+25.0</strong> kg/ha</span>
+              </div>
+              <input type="range" id="sim-slider-n" min="0" max="80" value="25.0" step="5" class="form-range">
+              <div class="range-limits"><span>0 kg/ha</span><span>40 kg/ha</span><span>80 kg/ha</span></div>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-header">
+                <span class="field-label">Supplemental Phosphate (P)</span>
+                <span class="field-value"><strong id="sim-val-p">+15.0</strong> kg/ha</span>
+              </div>
+              <input type="range" id="sim-slider-p" min="0" max="50" value="15.0" step="5" class="form-range">
+              <div class="range-limits"><span>0 kg/ha</span><span>25 kg/ha</span><span>50 kg/ha</span></div>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-header">
+                <span class="field-label">Soil Organic Matter Target</span>
+                <span class="field-value"><strong id="sim-val-som">2.4</strong> %</span>
+              </div>
+              <input type="range" id="sim-slider-som" min="1.0" max="4.0" value="2.4" step="0.2" class="form-range">
+              <div class="range-limits"><span>1.0% (Depleted)</span><span>2.5% (Target)</span><span>4.0% (Rich)</span></div>
+            </div>
+          </div>
+
+          <div class="sim-outcomes-card">
+            <h3 class="panel-subtitle">Simulated Impact &amp; Financial Projections</h3>
+            
+            <div class="comparison-row">
+              <div class="comp-box">
+                <span class="comp-label">Current Baseline Yield</span>
+                <span class="comp-number" id="sim-base-yield">3.92 MT/Ha</span>
+                <span class="comp-sub" id="sim-base-prod">254.8 MT Total</span>
+              </div>
+              <div class="comp-arrow">&rarr;</div>
+              <div class="comp-box comp-box-highlight">
+                <span class="comp-label">Optimized Scenario Yield</span>
+                <span class="comp-number text-success" id="sim-opt-yield">4.36 MT/Ha</span>
+                <span class="comp-sub" id="sim-opt-prod">283.4 MT Total</span>
+              </div>
+            </div>
+
+            <div class="roi-summary-card">
+              <div class="roi-row">
+                <span>Net Yield Increase:</span>
+                <strong id="sim-net-increase">+0.44 MT/Ha (+28.6 MT)</strong>
+              </div>
+              <div class="roi-row">
+                <span>Estimated Added Farm Revenue (at $280/MT):</span>
+                <strong id="sim-added-rev" class="text-success">+$8,008 USD</strong>
+              </div>
+              <div class="roi-row">
+                <span>Estimated Soil Amendment Input Cost:</span>
+                <span id="sim-input-cost">$1,850 USD</span>
+              </div>
+              <div class="roi-divider"></div>
+              <div class="roi-row roi-highlight">
+                <span>Net Projected Agronomic Return (ROI):</span>
+                <strong id="sim-net-roi" class="text-primary">+332% (4.3x Return)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 3: REGIONAL COOPERATIVE ANALYTICS -->
+    <!-- ========================================================================= -->
+    <section id="tab-batch" class="tab-panel">
+      <div class="batch-analytics-container">
+        <!-- Cooperative Metrics Banner -->
+        <div class="regional-kpi-grid">
+          <div class="panel card kpi-stat-card">
+            <span class="kpi-mini-title">Total Regional Forecast</span>
+            <span class="kpi-big-num" id="batch-total-prod">1,679,556 MT</span>
+            <span class="kpi-mini-sub text-success">225 Co-op Farms Evaluated</span>
+          </div>
+          <div class="panel card kpi-stat-card">
+            <span class="kpi-mini-title">Regional Mean Yield</span>
+            <span class="kpi-big-num" id="batch-mean-yield">3.86 MT/Ha</span>
+            <span class="kpi-mini-sub">Spatial Ensemble R² = 0.8033</span>
+          </div>
+          <div class="panel card kpi-stat-card">
+            <span class="kpi-mini-title">Potential Yield Upside</span>
+            <span class="kpi-big-num text-success" id="batch-upside">+5.7%</span>
+            <span class="kpi-mini-sub">+95,734 MT via Soil Amendments</span>
+          </div>
+          <div class="panel card kpi-stat-card">
+            <span class="kpi-mini-title">High-Risk Farms Flagged</span>
+            <span class="kpi-big-num text-warning" id="batch-risk-count">201 / 225</span>
+            <span class="kpi-mini-sub">Soil Acidity / Heat Shock Drivers</span>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="panel card batch-table-panel">
+          <div class="card-header table-header-flex">
+            <div>
+              <h3 class="card-title">🌾 Regional Farm Yield Forecasts &amp; Amendment Schedule</h3>
+              <p class="card-desc">Live batch inference results across 15 agricultural districts.</p>
+            </div>
+            <div class="table-actions">
+              <input type="text" id="batch-search" placeholder="Filter by District or Crop..." class="form-input form-input-sm">
+              <select id="batch-filter-crop" class="form-select form-select-sm">
+                <option value="ALL">All Crops (5)</option>
+                <option value="Wheat">Wheat</option>
+                <option value="Rice">Rice</option>
+                <option value="Maize">Maize</option>
+                <option value="Soybean">Soybean</option>
+                <option value="Cotton">Cotton</option>
+              </select>
+              <button id="btn-export-batch" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="batch-results-table">
+              <thead>
+                <tr>
+                  <th>District</th>
+                  <th>Year</th>
+                  <th>Crop</th>
+                  <th>Area (Ha)</th>
+                  <th>Predicted Yield</th>
+                  <th>95% Confidence Interval</th>
+                  <th>Total Production</th>
+                  <th>Risk Status</th>
+                  <th>Top Recommended Prescription</th>
+                  <th>Upside</th>
+                </tr>
+              </thead>
+              <tbody id="batch-table-body">
+                <!-- Populated via Javascript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- TAB 4: COVARIATE DRIFT & MODEL HEALTH -->
+    <!-- ========================================================================= -->
+    <section id="tab-drift" class="tab-panel">
+      <div class="drift-container">
+        <!-- Health Gauge Card -->
+        <div class="panel card drift-health-card">
+          <div class="health-hero-flex">
+            <div class="health-circle-wrapper">
+              <div class="health-circle">
+                <span class="health-score-val" id="drift-health-score">100%</span>
+                <span class="health-score-label">HEALTHY</span>
+              </div>
+            </div>
+            <div class="health-details">
+              <h2 class="card-title">🛡️ Agronomic Covariate Stability &amp; Data Drift Monitor</h2>
+              <p class="card-desc">Tracks Population Stability Index (PSI) and Kolmogorov-Smirnov (KS) tests between baseline training distributions and incoming production telemetry.</p>
+              
+              <div class="drift-stats-row">
+                <div class="drift-pill pill-green">🟢 Stable Features: <strong id="drift-cnt-stable">9 / 9</strong></div>
+                <div class="drift-pill pill-amber">🟡 Moderate Drift: <strong id="drift-cnt-moderate">0</strong></div>
+                <div class="drift-pill pill-red">🔴 Significant Drift: <strong id="drift-cnt-high">0</strong></div>
+              </div>
+            </div>
+            <div class="health-cta">
+              <button id="btn-refresh-drift" class="btn btn-secondary btn-sm">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"/>
+                  <polyline points="1 20 1 14 7 14"/>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+                Run Drift Re-Scan
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drift Matrix Table -->
+        <div class="panel card drift-matrix-panel">
+          <h3 class="panel-subtitle">Monitored Agronomic Feature Covariate Matrix</h3>
+          <div class="table-responsive">
+            <table class="data-table" id="drift-matrix-table">
+              <thead>
+                <tr>
+                  <th>Monitored Feature</th>
+                  <th>PSI Metric</th>
+                  <th>KS Statistic</th>
+                  <th>KS p-value</th>
+                  <th>Baseline Distribution</th>
+                  <th>Production Telemetry</th>
+                  <th>Covariate Shift</th>
+                  <th>Stability Status</th>
+                </tr>
+              </thead>
+              <tbody id="drift-table-body">
+                <!-- Populated via Javascript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <span>&copy; 2026 Axlero Agri-Tech Initiative &bull; Project 3: Crop Yield &amp; Soil Forecasting System</span>
+      </div>
+      <div class="footer-right">
+        <span>Lead Data Integration &amp; ML Engineer: <strong>Syed Abdus Sabur</strong></span>
+        <span class="footer-sep">&bull;</span>
+        <span>Branch: <code>Syed-Abdus-Sabur</code></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

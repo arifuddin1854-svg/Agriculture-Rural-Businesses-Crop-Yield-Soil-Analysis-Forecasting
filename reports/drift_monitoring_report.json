@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-11-01T12:38:19.836648",
+  "baseline_records": 225,
+  "production_records": 225,
+  "total_monitored_features": 9,
+  "overall_status": "HEALTHY_STABLE",
+  "health_score_pct": 100.0,
+  "stable_feature_count": 9,
+  "moderate_drift_feature_count": 0,
+  "high_drift_feature_count": 0,
+  "recommended_action": "All monitored agronomic and meteorological covariates match baseline distributions within expected tolerance.",
+  "features": {
+    "nitrogen_kg_ha": {
+      "feature": "nitrogen_kg_ha",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 112.7,
+      "baseline_std": 30.26,
+      "current_mean": 112.7,
+      "current_std": 30.26,
+      "mean_shift_pct": 0.0
+    },
+    "phosphorus_kg_ha": {
+      "feature": "phosphorus_kg_ha",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 44.13,
+      "baseline_std": 15.04,
+      "current_mean": 44.13,
+      "current_std": 15.04,
+      "mean_shift_pct": 0.0
+    },
+    "potassium_kg_ha": {
+      "feature": "potassium_kg_ha",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 160.18,
+      "baseline_std": 47.79,
+      "current_mean": 160.18,
+      "current_std": 47.79,
+      "mean_shift_pct": 0.0
+    },
+    "soil_ph": {
+      "feature": "soil_ph",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 6.32,
+      "baseline_std": 0.63,
+      "current_mean": 6.32,
+      "current_std": 0.63,
+      "mean_shift_pct": 0.0
+    },
+    "organic_matter_pct": {
+      "feature": "organic_matter_pct",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 1.19,
+      "baseline_std": 0.28,
+      "current_mean": 1.19,
+      "current_std": 0.28,
+      "mean_shift_pct": 0.0
+    },
+    "cumulative_rainfall_mm": {
+      "feature": "cumulative_rainfall_mm",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 884.1,
+      "baseline_std": 404.02,
+      "current_mean": 884.1,
+      "current_std": 404.02,
+      "mean_shift_pct": 0.0
+    },
+    "mean_temp_max": {
+      "feature": "mean_temp_max",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 32.47,
+      "baseline_std": 3.99,
+      "current_mean": 32.47,
+      "current_std": 3.99,
+      "mean_shift_pct": 0.0
+    },
+    "mean_vpd_kpa": {
+      "feature": "mean_vpd_kpa",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 1.32,
+      "baseline_std": 0.13,
+      "current_mean": 1.32,
+      "current_std": 0.13,
+      "mean_shift_pct": 0.0
+    },
+    "heat_stress_days": {
+      "feature": "heat_stress_days",
+      "psi": 0.0,
+      "ks_statistic": 0.0,
+      "ks_p_value": 1.0,
+      "status": "STABLE",
+      "baseline_mean": 72.23,
+      "baseline_std": 40.97,
+      "current_mean": 72.23,
+      "current_std": 40.97,
+      "mean_shift_pct": 0.0
+    }
+  }
+}

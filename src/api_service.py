@@ -18,6 +18,7 @@ from datetime import datetime
 import json
 import logging
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from pathlib import Path
 import sys
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
@@ -69,16 +70,52 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
     def _send_error(self, message: str, status_code: int = 400):
         self._send_json({"error": True, "status_code": status_code, "message": message}, status_code=status_code)
 
+    def _serve_file(self, file_path: Path, content_type: str):
+        if not file_path.exists():
+            self._send_error(f"File not found: {file_path.name}", 404)
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", f"{content_type}; charset=utf-8")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        with open(file_path, "rb") as f:
+            self.wfile.write(f.read())
+
     def do_GET(self):
         parsed = urlparse(self.path)
         path = parsed.path.rstrip("/")
         engine = self.get_engine()
+        static_dir = Path("static")
 
-        if path in ["", "/health", "/api/health"]:
+        # 1. Serve Dashboard HTML
+        if path in ["", "/", "/dashboard"]:
+            index_path = static_dir / "index.html"
+            if index_path.exists():
+                self._serve_file(index_path, "text/html")
+                return
+
+        # 2. Serve Static Assets (.css, .js, .svg, .json)
+        if "." in path:
+            filename = Path(path).name
+            target_file = static_dir / filename
+            if target_file.exists():
+                ext = target_file.suffix.lower()
+                ctype = {
+                    ".html": "text/html",
+                    ".css": "text/css",
+                    ".js": "application/javascript",
+                    ".json": "application/json",
+                    ".svg": "image/svg+xml"
+                }.get(ext, "application/octet-stream")
+                self._serve_file(target_file, ctype)
+                return
+
+        # 3. Health Endpoint
+        if path in ["/health", "/api/health"]:
             response = {
                 "status": "healthy",
                 "service": "Crop Yield Forecasting & Soil Advisory API",
-                "version": "1.1.0",
+                "version": "1.2.0",
                 "timestamp": datetime.now().isoformat(),
                 "model_champion": engine.model_name,
                 "features_count": len(engine.feature_names),
@@ -87,6 +124,7 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
             }
             self._send_json(response, 200)
 
+        # 4. Model Metadata
         elif path in ["/model/metadata", "/api/v1/model"]:
             response = {
                 "model_name": engine.model_name,
@@ -99,6 +137,17 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                 "supported_soils": engine.SUPPORTED_SOILS
             }
             self._send_json(response, 200)
+
+        # 5. Covariate Drift & Monitoring
+        elif path in ["/api/v1/monitoring", "/monitoring"]:
+            try:
+                from src.monitoring import ModelMonitoringEngine
+                mon_engine = ModelMonitoringEngine()
+                drift_res = mon_engine.evaluate_covariate_drift("data/processed/unified_agri_dataset.csv")
+                self._send_json(drift_res, 200)
+            except Exception as e:
+                logger.error(f"Error computing monitoring metrics: {str(e)}", exc_info=True)
+                self._send_error(f"Monitoring error: {str(e)}", 500)
 
         else:
             self._send_error(f"Endpoint '{path}' not found", 404)

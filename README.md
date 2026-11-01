@@ -242,11 +242,26 @@ python -m src.api_service --port 8000
 ```
 
 #### API Endpoints
+- **`GET  /` or `/dashboard`**: Interactive Web Application dashboard frontend.
 - **`GET  /health`**: Health status, model version, and spatial $R^2 = 0.8033$.
 - **`GET  /model/metadata`**: Full model architecture, features list, and CV benchmarks.
+- **`GET  /api/v1/monitoring`**: Real-time covariate drift scores (PSI, KS tests) and system health.
 - **`POST /api/v1/predict`**: Real-time yield forecast with 95% confidence intervals and risk scoring.
 - **`POST /api/v1/prescribe`**: Forecast + actionable counterfactual soil amendments with % yield upside.
 - **`POST /api/v1/batch`**: Multi-farm regional batch predictions.
+
+### 6. Interactive Agronomic Web Dashboard (Day 12)
+Access the state-of-the-art decision-support web dashboard by starting the server and navigating to `http://localhost:8000` in your browser:
+- **🌱 Single Farm Profiler**: Real-time yield forecasting, 95% CI bands, and environmental stress meters.
+- **🧪 What-If Soil Simulator**: Interactive sliders for pH and N-P-K with live financial ROI calculations.
+- **📊 Regional Cooperative Analytics**: Searchable, filterable table for 225 district farms with CSV export.
+- **🛡️ Covariate Drift & Health Monitor**: Live visual PSI gauges tracking model stability.
+
+### 7. Covariate Drift & Model Stability Engine (Day 12)
+Audit production telemetry against baseline training distributions using Population Stability Index (PSI) and two-sample Kolmogorov-Smirnov (KS) tests:
+```bash
+python -m src.monitoring --baseline data/processed/train_features.csv --production data/processed/unified_agri_dataset.csv
+```
 
 ---
 
@@ -288,7 +303,7 @@ The advisory engine uses $\frac{\partial f}{\partial x_j}$ within the controllab
 ## 📈 Future Enhancements
 
 - [ ] **Satellite NDVI Integration**: Incorporate Sentinel-2 / Landsat remote-sensing vegetation indices for real-time vegetative growth tracking.
-- [ ] **Interactive Streamlit Web Dashboard**: Build an intuitive UI allowing farmers and cooperatives to upload soil test results and interact with what-if simulators.
+- [x] **Interactive Agronomic Web Dashboard**: Modern responsive frontend with live What-If simulator, farm profiler, and cooperative analytics.
 - [ ] **Climate Change Scenario Modeling**: Integrate CMIP6 future climate projections to model 5-to-10 year yield resilience under drought scenarios.
 
 ---
