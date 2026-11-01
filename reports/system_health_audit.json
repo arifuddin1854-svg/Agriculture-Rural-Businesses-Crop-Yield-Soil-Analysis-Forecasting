@@ -1,0 +1,207 @@
+{
+  "timestamp": "2026-11-01T13:19:15.296765",
+  "overall_status": "HEALTHY",
+  "checks_passed": 20,
+  "checks_failed": 0,
+  "checks_total": 20,
+  "categories": {
+    "Model Checkpoints": [
+      {
+        "check": "Production Regressor Artifact",
+        "status": "PASS",
+        "details": {
+          "path": "models\\best_yield_regressor.joblib",
+          "model_type": "RandomForestRegressor",
+          "n_features": 57,
+          "spatial_cv_r2": 0.8033,
+          "target": "crop_yield_mt_ha"
+        }
+      },
+      {
+        "check": "Neural Regressor Artifact",
+        "status": "PASS",
+        "details": {
+          "path": "models\\neural_yield_regressor.joblib",
+          "model_type": "MLPRegressor",
+          "n_features": 57,
+          "spatial_cv_r2": 0.3063
+        }
+      }
+    ],
+    "Data Store & Feature Layers": [
+      {
+        "check": "Raw Crop Yield Records",
+        "status": "PASS",
+        "details": {
+          "path": "data\\raw\\historical_yields.csv",
+          "rows": 225,
+          "columns": 6,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Raw Soil Profiles",
+        "status": "PASS",
+        "details": {
+          "path": "data\\raw\\soil_chemistry.csv",
+          "rows": 15,
+          "columns": 8,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Raw Weather Telemetry",
+        "status": "PASS",
+        "details": {
+          "path": "data\\raw\\weather_daily.csv",
+          "rows": 5000,
+          "columns": 9,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Dekadal Satellite Timeseries",
+        "status": "PASS",
+        "details": {
+          "path": "data\\raw\\satellite_spectral_timeseries.csv",
+          "rows": 2700,
+          "columns": 13,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Unified Agronomic Dataset",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\unified_agri_dataset.csv",
+          "rows": 225,
+          "columns": 35,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Engineered ML Feature Matrix",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\train_features.csv",
+          "rows": 225,
+          "columns": 63,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Canopy Vegetation Indices",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\canopy_vegetation_indices.csv",
+          "rows": 225,
+          "columns": 14,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Multimodal Agri Dataset",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\multimodal_agri_dataset.csv",
+          "rows": 225,
+          "columns": 50,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Regional Batch Predictions",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\batch_predictions.csv",
+          "rows": 225,
+          "columns": 18,
+          "missing_required_cols": []
+        }
+      },
+      {
+        "check": "Climate Scenario Projections",
+        "status": "PASS",
+        "details": {
+          "path": "data\\processed\\climate_scenario_projections.csv",
+          "rows": 450,
+          "columns": 12,
+          "missing_required_cols": []
+        }
+      }
+    ],
+    "Real-Time Inference SLA": [
+      {
+        "check": "Single-Farm Advisory & Inference Latency (<75ms SLA)",
+        "status": "PASS",
+        "details": {
+          "iterations": 50,
+          "mean_ms": 48.18,
+          "p95_ms": 51.44,
+          "min_ms": 45.03,
+          "max_ms": 56.67,
+          "sla_target_ms": 75.0
+        }
+      }
+    ],
+    "Web Service & UI Assets": [
+      {
+        "check": "Dashboard HTML",
+        "status": "PASS",
+        "details": {
+          "path": "static\\index.html",
+          "size_kb": 30.43
+        }
+      },
+      {
+        "check": "Dashboard Stylesheet",
+        "status": "PASS",
+        "details": {
+          "path": "static\\style.css",
+          "size_kb": 19.61
+        }
+      },
+      {
+        "check": "Dashboard Interactive JS",
+        "status": "PASS",
+        "details": {
+          "path": "static\\app.js",
+          "size_kb": 26.26
+        }
+      },
+      {
+        "check": "REST API Service Module",
+        "status": "PASS",
+        "details": {
+          "path": "src\\api_service.py",
+          "size_kb": 10.06
+        }
+      },
+      {
+        "check": "Production Dockerfile",
+        "status": "PASS",
+        "details": {
+          "path": "Dockerfile",
+          "size_kb": 1.72
+        }
+      },
+      {
+        "check": "Docker Compose Configuration",
+        "status": "PASS",
+        "details": {
+          "path": "docker-compose.yml",
+          "size_kb": 0.67
+        }
+      },
+      {
+        "check": "CI/CD Workflow",
+        "status": "PASS",
+        "details": {
+          "path": ".github\\workflows\\ci.yml",
+          "size_kb": 2.76
+        }
+      }
+    ]
+  },
+  "audit_duration_sec": 3.382
+}

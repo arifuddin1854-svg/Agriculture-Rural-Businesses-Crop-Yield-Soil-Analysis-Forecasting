@@ -1,0 +1,31 @@
+# Git & IDE
+.git
+.gitignore
+.agents
+.gemini
+.vscode
+.idea
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Testing & Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary and local scratch files
+scratch/
+*.tmp
+*.log

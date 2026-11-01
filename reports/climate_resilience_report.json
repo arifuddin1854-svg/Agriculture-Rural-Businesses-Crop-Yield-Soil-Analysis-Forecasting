@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-11-01T13:18:51.282557",
+  "pipeline_stage": "Day 16 - Climate Change Scenario Simulation Engine",
+  "scenarios_evaluated": [
+    "SSP2-4.5",
+    "SSP5-8.5"
+  ],
+  "total_simulations": 20,
+  "execution_seconds": 0.5,
+  "crop_impacts": {
+    "Cotton": {
+      "ssp2_mean_change_pct": 19.6,
+      "ssp5_mean_change_pct": 20.8,
+      "vulnerability_tier": "RESILIENT"
+    },
+    "Maize": {
+      "ssp2_mean_change_pct": -3.86,
+      "ssp5_mean_change_pct": -5.1,
+      "vulnerability_tier": "MODERATE_VULNERABILITY"
+    },
+    "Rice": {
+      "ssp2_mean_change_pct": -5.96,
+      "ssp5_mean_change_pct": -5.8,
+      "vulnerability_tier": "MODERATE_VULNERABILITY"
+    },
+    "Soybean": {
+      "ssp2_mean_change_pct": -6.95,
+      "ssp5_mean_change_pct": -5.83,
+      "vulnerability_tier": "MODERATE_VULNERABILITY"
+    }
+  },
+  "most_vulnerable_districts": {
+    "DIST_104": -6.83,
+    "DIST_101": -4.45,
+    "DIST_103": -3.33,
+    "DIST_102": 18.0
+  },
+  "recommended_adaptation_policies": [
+    "Early Sowing Calendar Shift: Advance sowing dates by 14-21 days for Wheat to avoid grain-filling heat shocks.",
+    "Crop Diversification: Transition high-vulnerability districts to drought-hardy millets, sorghum, and pulses.",
+    "Soil Water Retention Buffering: Incorporate 8 MT/ha organic compost and biochar to maintain soil moisture during prolonged dry spells."
+  ]
+}

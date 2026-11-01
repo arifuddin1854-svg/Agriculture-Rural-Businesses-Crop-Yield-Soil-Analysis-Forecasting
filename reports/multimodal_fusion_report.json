@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-11-01T13:19:04.601791",
+  "pipeline_stage": "Day 14 - Multi-Modal Data Fusion",
+  "total_records": 225,
+  "total_features": 50,
+  "execution_seconds": 0.25,
+  "multi_modal_correlations": {
+    "peak_ndvi_vs_yield": 0.026,
+    "prue_vs_yield": -0.124
+  },
+  "crop_breakdown": {
+    "Cotton": {
+      "records": 39,
+      "mean_yield_mt_ha": 2.11,
+      "mean_peak_ndvi": 0.813,
+      "ndvi_yield_correlation": 0.219,
+      "mean_prue": 0.0263
+    },
+    "Maize": {
+      "records": 44,
+      "mean_yield_mt_ha": 5.63,
+      "mean_peak_ndvi": 0.809,
+      "ndvi_yield_correlation": 0.467,
+      "mean_prue": 0.0257
+    },
+    "Rice": {
+      "records": 53,
+      "mean_yield_mt_ha": 4.12,
+      "mean_peak_ndvi": 0.823,
+      "ndvi_yield_correlation": 0.189,
+      "mean_prue": 0.0283
+    },
+    "Soybean": {
+      "records": 40,
+      "mean_yield_mt_ha": 2.68,
+      "mean_peak_ndvi": 0.816,
+      "ndvi_yield_correlation": 0.25,
+      "mean_prue": 0.0328
+    },
+    "Wheat": {
+      "records": 49,
+      "mean_yield_mt_ha": 4.39,
+      "mean_peak_ndvi": 0.741,
+      "ndvi_yield_correlation": 0.456,
+      "mean_prue": 0.0279
+    }
+  }
+}

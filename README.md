@@ -263,6 +263,73 @@ Audit production telemetry against baseline training distributions using Populat
 python -m src.monitoring --baseline data/processed/train_features.csv --production data/processed/unified_agri_dataset.csv
 ```
 
+### 8. Satellite Remote Sensing & Vegetation Indices Engine (Day 13)
+Generate Sentinel-2 / Landsat-8 optical surface reflectance timeseries at 10-day dekadal intervals and compute biophysical canopy metrics:
+```bash
+python -m src.remote_sensing
+```
+- **Indices Derived**: $\text{NDVI}$, $\text{NDWI}$ (canopy hydration), $\text{EVI}$ (enhanced vegetation), and $\text{VCI}$ (Vegetation Condition Index).
+- **Phenological Metrics**: Peak NDVI, Day of Year (DOY) of heading/flowering, integrated NDVI Area Under Curve (AUC), and canopy senescence rate.
+
+### 9. Multi-Modal Data Fusion (Day 14)
+Harmonize ground soil chemistry, weather telemetry, and satellite canopy metrics into a 50-feature multi-modal dataset:
+```bash
+python -m src.multimodal_fusion
+```
+- **Engineered Biophysical Interactions**:
+  * Photosynthetic Radiation Use Efficiency ($\text{PRUE} = \frac{\text{NDVI AUC}}{\text{GDD Effective}}$)
+  * Canopy Hydration Deficit ($\text{NDWI Mean} \times \text{VPD}$)
+  * Thermal Canopy Stress Index ($\frac{\text{Heat Stress Days}}{\text{Peak NDVI} + 0.05}$)
+
+### 10. Deep Learning & Tabular Neural Regressor Benchmark (Day 15)
+Train and benchmark a Multi-Layer Perceptron (MLP) tabular regressor with residual depth under 5-Fold Spatial Group-KFold CV:
+```bash
+python -m src.neural_models
+```
+- Exports model checkpoint `models/neural_yield_regressor.joblib` and generates comparative training curves in `reports/figures/06_*.png`.
+
+### 11. Climate Change Scenario Simulation Engine (Day 16)
+Simulate IPCC CMIP6-aligned climate pathways across all 225 agricultural district farms:
+```bash
+python -m src.climate_scenarios
+```
+- **Pathways Modeled**:
+  * **SSP2-4.5 (Middle of the Road)**: $+1.5^\circ\text{C}$ warming, $+35\%$ heat stress days, $+15\%$ rainfall variability.
+  * **SSP5-8.5 (High Emissions)**: $+2.8^\circ\text{C}$ warming, $+75\%$ heat stress days, $+30\%$ rainfall variability.
+- **Vulnerability Mapping**: Generates district vulnerability heatmaps and actionable resilience policy recommendations in `reports/climate_resilience_report.md`.
+
+### 12. Automated System Health Audit CLI & Docker Containerization (Day 17)
+Run a comprehensive 20-point platform integrity audit checking model weights, dataset schemas, and sub-75ms inference latency SLA:
+```bash
+python run_system_health_audit.py --strict
+```
+
+#### Run with Docker & Docker Compose
+```bash
+# Build and run the entire platform microservice and dashboard
+docker compose up --build -d
+
+# Check container health status
+docker compose ps
+
+# Access interactive dashboard at http://localhost:8000
+```
+
+### 13. Master Platform Orchestration CLI (Day 18)
+Execute any stage or the entire platform lifecycle end-to-end:
+```bash
+# Run entire lifecycle (topological sequence)
+python run_master_platform.py --stage all
+
+# Run specific pipeline stage
+python run_master_platform.py --stage audit
+python run_master_platform.py --stage satellite
+python run_master_platform.py --stage climate
+
+# Dry-run execution simulation
+python run_master_platform.py --stage all --dry-run
+```
+
 ---
 
 ## 📊 Analytical Methodology
@@ -293,18 +360,25 @@ The advisory engine uses $\frac{\partial f}{\partial x_j}$ within the controllab
 
 - **Core Language**: Python 3.10+
 - **Data Wrangling & Geospatial**: Pandas, NumPy, GeoPandas, PyArrow
-- **Machine Learning**: Scikit-Learn, LightGBM, XGBoost
+- **Machine Learning & Deep Learning**: Scikit-Learn, LightGBM, XGBoost, Tabular Neural Networks
+- **Remote Sensing & Optics**: Sentinel-2 / Landsat-8 Dekadal Composites (NDVI, NDWI, EVI, VCI)
 - **Explainable AI (XAI)**: SHAP (SHapley Additive exPlanations)
+- **Climate Projections**: CMIP6 Climate Scenarios (SSP2-4.5 & SSP5-8.5)
+- **DevOps & Containerization**: Docker, Docker Compose, GitHub Actions CI/CD
 - **Visualization**: Matplotlib, Seaborn, Folium, Plotly
-- **Environment & Quality**: JupyterLab, Flake8, Black
+- **Web Dashboard**: Vanilla HTML5, Modern CSS Glassmorphism, Vanilla ES6 JavaScript
 
 ---
 
-## 📈 Future Enhancements
+## 📈 Roadmap & Completed Enhancements
 
-- [ ] **Satellite NDVI Integration**: Incorporate Sentinel-2 / Landsat remote-sensing vegetation indices for real-time vegetative growth tracking.
-- [x] **Interactive Agronomic Web Dashboard**: Modern responsive frontend with live What-If simulator, farm profiler, and cooperative analytics.
-- [ ] **Climate Change Scenario Modeling**: Integrate CMIP6 future climate projections to model 5-to-10 year yield resilience under drought scenarios.
+- [x] **Satellite Remote Sensing Integration**: Sentinel-2 / Landsat dekadal NDVI/NDWI/EVI canopy metrics (Day 13).
+- [x] **Multi-Modal Data Fusion**: Ground soil, weather, and satellite canopy interaction features (Day 14).
+- [x] **Deep Learning Neural Regressor Benchmark**: Tabular MLP with residual depth under Spatial Group-KFold (Day 15).
+- [x] **Interactive Agronomic Web Dashboard**: Modern responsive frontend with live What-If simulator, farm profiler, and cooperative analytics (Day 12).
+- [x] **Climate Change Scenario Modeling**: CMIP6 SSP2-4.5 & SSP5-8.5 future yield resilience simulation (Day 16).
+- [x] **Docker Containerization & CI/CD**: Production Dockerfile, docker-compose, and GitHub Actions CI (Day 17).
+- [x] **Enterprise Health Audit & Master Orchestrator**: Automated 20-point audit and unified master CLI (Days 17 & 18).
 
 ---
 

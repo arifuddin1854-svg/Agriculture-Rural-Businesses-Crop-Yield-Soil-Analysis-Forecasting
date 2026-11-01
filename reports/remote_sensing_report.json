@@ -1,0 +1,51 @@
+{
+  "timestamp": "2026-11-01T13:18:21.363996",
+  "pipeline_stage": "Day 13 - Satellite Remote Sensing Engine",
+  "total_records": 225,
+  "districts_covered": 15,
+  "crops_covered": 5,
+  "execution_seconds": 0.54,
+  "spectral_kpis": {
+    "regional_mean_peak_ndvi": 0.8,
+    "regional_mean_ndvi_auc": 81.6,
+    "regional_mean_ndwi": 0.4,
+    "regional_mean_vci": 92.2
+  },
+  "crop_summary": {
+    "Cotton": {
+      "records": 39,
+      "mean_peak_ndvi": 0.813,
+      "mean_ndvi_auc": 86.0,
+      "mean_flowering_ndwi": 0.568,
+      "mean_vci": 94.4
+    },
+    "Maize": {
+      "records": 44,
+      "mean_peak_ndvi": 0.809,
+      "mean_ndvi_auc": 85.1,
+      "mean_flowering_ndwi": 0.574,
+      "mean_vci": 93.5
+    },
+    "Rice": {
+      "records": 53,
+      "mean_peak_ndvi": 0.823,
+      "mean_ndvi_auc": 86.7,
+      "mean_flowering_ndwi": 0.612,
+      "mean_vci": 94.8
+    },
+    "Soybean": {
+      "records": 40,
+      "mean_peak_ndvi": 0.816,
+      "mean_ndvi_auc": 85.5,
+      "mean_flowering_ndwi": 0.582,
+      "mean_vci": 93.8
+    },
+    "Wheat": {
+      "records": 49,
+      "mean_peak_ndvi": 0.741,
+      "mean_ndvi_auc": 66.0,
+      "mean_flowering_ndwi": 0.537,
+      "mean_vci": 85.4
+    }
+  }
+}
