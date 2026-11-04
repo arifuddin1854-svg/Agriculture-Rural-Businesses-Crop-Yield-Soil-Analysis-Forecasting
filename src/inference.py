@@ -74,6 +74,9 @@ class CropYieldInferenceEngine:
             self.temporal_metrics = {}
             self.timestamp = "N/A"
 
+        if hasattr(self.model, "n_jobs"):
+            self.model.n_jobs = 1
+
         logger.info(
             f"Model '{self.model_name}' successfully loaded with {len(self.feature_names)} features. "
             f"Spatial R²={self.spatial_metrics.get('R2', 'N/A')}, RMSE={self.spatial_metrics.get('RMSE', 'N/A')}"

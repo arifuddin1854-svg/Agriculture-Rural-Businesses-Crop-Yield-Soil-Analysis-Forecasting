@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-01T13:19:15.296765",
+  "timestamp": "2026-11-04T16:48:28.602339",
   "overall_status": "HEALTHY",
   "checks_passed": 20,
   "checks_failed": 0,
@@ -136,10 +136,10 @@
         "status": "PASS",
         "details": {
           "iterations": 50,
-          "mean_ms": 48.18,
-          "p95_ms": 51.44,
-          "min_ms": 45.03,
-          "max_ms": 56.67,
+          "mean_ms": 31.42,
+          "p95_ms": 33.16,
+          "min_ms": 29.73,
+          "max_ms": 33.49,
           "sla_target_ms": 75.0
         }
       }
@@ -203,5 +203,5 @@
       }
     ]
   },
-  "audit_duration_sec": 3.382
+  "audit_duration_sec": 2.948
 }

@@ -1,8 +1,8 @@
 # Axlero Agri-Tech Platform - System Health & Integrity Audit Report
 
 **Audit Status:** `HEALTHY`  
-**Timestamp:** `2026-11-01T13:19:15.296765`  
-**Duration:** `3.382s`  
+**Timestamp:** `2026-11-04T16:48:28.602339`  
+**Duration:** `2.948s`  
 **Passing Checks:** `20 / 20`  
 
 ## Category Audit Breakdown
@@ -30,7 +30,7 @@
 ### Real-Time Inference SLA
 | Verification Check | Status | Details |
 |---|---|---|
-| Single-Farm Advisory & Inference Latency (<75ms SLA) | PASS | **iterations**: 50<br>**mean_ms**: 48.18<br>**p95_ms**: 51.44<br>**min_ms**: 45.03<br>**max_ms**: 56.67<br>**sla_target_ms**: 75.0 |
+| Single-Farm Advisory & Inference Latency (<75ms SLA) | PASS | **iterations**: 50<br>**mean_ms**: 31.42<br>**p95_ms**: 33.16<br>**min_ms**: 29.73<br>**max_ms**: 33.49<br>**sla_target_ms**: 75.0 |
 
 ### Web Service & UI Assets
 | Verification Check | Status | Details |

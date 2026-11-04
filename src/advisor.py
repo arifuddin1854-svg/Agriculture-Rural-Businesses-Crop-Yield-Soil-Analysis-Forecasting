@@ -157,6 +157,8 @@ def generate_advisory_report(
     else:
         checkpoint = joblib.load(chk_path)
         model = checkpoint["model"]
+        if hasattr(model, "n_jobs"):
+            model.n_jobs = 1
         feature_names = checkpoint["feature_names"]
         vec = build_feature_vector(
             crop, nitrogen, phosphorus, potassium, ph, organic_matter,
