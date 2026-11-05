@@ -85,10 +85,11 @@ ehthumbs.db
 *.zip
 *.parquet
 
-# Model checkpoints (keep .gitkeep)
+# Model checkpoints (track production checkpoints and .gitkeep)
 models/*
 !models/.gitkeep
-*.joblib
+!models/best_yield_regressor.joblib
+!models/neural_yield_regressor.joblib
 *.pkl
 *.h5
 *.onnx

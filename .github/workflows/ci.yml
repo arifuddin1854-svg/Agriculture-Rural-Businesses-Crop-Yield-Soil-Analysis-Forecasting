@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "main", "Syed-Abdus-Sabur" ]
 
+env:
+  MPLBACKEND: Agg
+
 jobs:
   lint-and-syntax:
     name: Code Syntax & Static Verification
