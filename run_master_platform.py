@@ -82,6 +82,13 @@ PLATFORM_STAGES = [
         "description": "Simulate CMIP6 SSP2-4.5 and SSP5-8.5 climate stress projections and vulnerability"
     },
     {
+        "id": "economics",
+        "name": "Agricultural Economics & Portfolio Optimization",
+        "module": "src.economic_optimizer",
+        "function": "main",
+        "description": "Calculate farm profit margins, prescriptive amendment ROI, and Markowitz crop portfolios"
+    },
+    {
         "id": "audit",
         "name": "System Health & SLA Performance Audit",
         "module": "run_system_health_audit",
@@ -215,7 +222,7 @@ Examples:
         "--stage",
         type=str,
         default="all",
-        choices=["all", "pipeline", "features", "models", "neural", "satellite", "inference", "climate", "audit"],
+        choices=["all", "pipeline", "features", "models", "neural", "satellite", "inference", "climate", "economics", "audit"],
         help="Specify the pipeline stage to execute (default: all)"
     )
     parser.add_argument(

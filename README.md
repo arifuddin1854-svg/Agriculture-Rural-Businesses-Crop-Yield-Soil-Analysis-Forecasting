@@ -325,9 +325,16 @@ python run_master_platform.py --stage all
 python run_master_platform.py --stage audit
 python run_master_platform.py --stage satellite
 python run_master_platform.py --stage climate
+python run_master_platform.py --stage economics
 
 # Dry-run execution simulation
 python run_master_platform.py --stage all --dry-run
+```
+
+### 14. Agricultural Economics & Crop Portfolio Optimization (Day 19)
+Calculate farm financial profit margins, prescriptive amendment ROI, and Markowitz crop portfolio allocations:
+```bash
+python -m src.economic_optimizer
 ```
 
 ---
@@ -379,6 +386,7 @@ The advisory engine uses $\frac{\partial f}{\partial x_j}$ within the controllab
 - [x] **Climate Change Scenario Modeling**: CMIP6 SSP2-4.5 & SSP5-8.5 future yield resilience simulation (Day 16).
 - [x] **Docker Containerization & CI/CD**: Production Dockerfile, docker-compose, and GitHub Actions CI (Day 17).
 - [x] **Enterprise Health Audit & Master Orchestrator**: Automated 20-point audit and unified master CLI (Days 17 & 18).
+- [x] **Agricultural Economics & Crop Portfolio Optimization**: Farm profit margins, amendment ROI waterfall, and Markowitz portfolio allocation under climate risk (Day 19).
 
 ---
 

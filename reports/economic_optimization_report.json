@@ -1,0 +1,215 @@
+{
+  "generated_timestamp": "2026-11-05T16:26:23.324272",
+  "sprint_milestone": "Day 19: Agricultural Economics & Farm Portfolio Optimization",
+  "commodity_benchmarks_usd_per_mt": {
+    "Wheat": 265.0,
+    "Rice": 340.0,
+    "Maize": 210.0,
+    "Soybean": 480.0,
+    "Cotton": 750.0
+  },
+  "sample_farm_financial_profile": {
+    "crop_type": "Wheat",
+    "planted_area_ha": 50.0,
+    "predicted_yield_mt_ha": 4.2,
+    "commodity_price_usd_per_mt": 265.0,
+    "per_hectare": {
+      "gross_revenue_usd": 1113.0,
+      "base_operations_cost_usd": 420.0,
+      "fertilizer_cost_usd": 274.75,
+      "total_production_cost_usd": 694.75,
+      "net_profit_usd": 418.25,
+      "profit_margin_pct": 37.58
+    },
+    "farm_totals": {
+      "gross_revenue_usd": 55650.0,
+      "total_production_cost_usd": 34737.5,
+      "net_profit_usd": 20912.5
+    }
+  },
+  "prescriptive_amendment_roi_breakdown": [
+    {
+      "action": "Synchronized Nitrogen Top-Dressing",
+      "category": "Fertilizer Optimization",
+      "amendment_investment_usd_ha": 43.75,
+      "expected_yield_gain_mt_ha": 0.42,
+      "incremental_revenue_usd_ha": 111.3,
+      "net_profit_gain_usd_ha": 67.55,
+      "roi_percentage": 154.4,
+      "payback_economic_rating": "EXCELLENT"
+    },
+    {
+      "action": "Apply Agricultural Limestone (CaCO3)",
+      "category": "Soil Chemical Amendment",
+      "amendment_investment_usd_ha": 90.0,
+      "expected_yield_gain_mt_ha": 0.58,
+      "incremental_revenue_usd_ha": 153.7,
+      "net_profit_gain_usd_ha": 63.7,
+      "roi_percentage": 70.8,
+      "payback_economic_rating": "POSITIVE"
+    },
+    {
+      "action": "Biochar & Green Manure Incorporation",
+      "category": "Soil Organic Carbon",
+      "amendment_investment_usd_ha": 120.0,
+      "expected_yield_gain_mt_ha": 0.28,
+      "incremental_revenue_usd_ha": 74.2,
+      "net_profit_gain_usd_ha": -45.8,
+      "roi_percentage": -38.2,
+      "payback_economic_rating": "SUBOPTIMAL"
+    }
+  ],
+  "markowitz_crop_portfolio_optimization": {
+    "optimal_weights": {
+      "Cotton": 0.336,
+      "Maize": 0.05,
+      "Rice": 0.05,
+      "Soybean": 0.514,
+      "Wheat": 0.05
+    },
+    "expected_net_profit_usd_ha": 803.64,
+    "profit_volatility_usd_ha": 99.72,
+    "sharpe_ratio": 8.059
+  },
+  "regional_cooperative_credit_ratings": [
+    {
+      "district_id": "DIST_101",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 682.3,
+      "profit_std_usd_ha": 199.29,
+      "coefficient_of_variation": 0.292,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_102",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 740.09,
+      "profit_std_usd_ha": 211.62,
+      "coefficient_of_variation": 0.286,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_103",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 816.63,
+      "profit_std_usd_ha": 354.98,
+      "coefficient_of_variation": 0.435,
+      "credit_rating": "A",
+      "risk_tier": "UPPER MEDIUM GRADE"
+    },
+    {
+      "district_id": "DIST_104",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 671.41,
+      "profit_std_usd_ha": 218.11,
+      "coefficient_of_variation": 0.325,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_105",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 743.2,
+      "profit_std_usd_ha": 314.68,
+      "coefficient_of_variation": 0.423,
+      "credit_rating": "A",
+      "risk_tier": "UPPER MEDIUM GRADE"
+    },
+    {
+      "district_id": "DIST_106",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 660.54,
+      "profit_std_usd_ha": 114.07,
+      "coefficient_of_variation": 0.173,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_107",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 735.0,
+      "profit_std_usd_ha": 298.65,
+      "coefficient_of_variation": 0.406,
+      "credit_rating": "A",
+      "risk_tier": "UPPER MEDIUM GRADE"
+    },
+    {
+      "district_id": "DIST_108",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 752.3,
+      "profit_std_usd_ha": 104.11,
+      "coefficient_of_variation": 0.138,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_109",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 702.75,
+      "profit_std_usd_ha": 234.24,
+      "coefficient_of_variation": 0.333,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_110",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 764.49,
+      "profit_std_usd_ha": 323.04,
+      "coefficient_of_variation": 0.423,
+      "credit_rating": "A",
+      "risk_tier": "UPPER MEDIUM GRADE"
+    },
+    {
+      "district_id": "DIST_111",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 712.94,
+      "profit_std_usd_ha": 218.18,
+      "coefficient_of_variation": 0.306,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_112",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 800.14,
+      "profit_std_usd_ha": 264.5,
+      "coefficient_of_variation": 0.331,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_113",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 728.16,
+      "profit_std_usd_ha": 200.59,
+      "coefficient_of_variation": 0.275,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_114",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 695.0,
+      "profit_std_usd_ha": 133.62,
+      "coefficient_of_variation": 0.192,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    },
+    {
+      "district_id": "DIST_115",
+      "farms_evaluated": 15,
+      "mean_net_profit_usd_ha": 627.04,
+      "profit_std_usd_ha": 169.35,
+      "coefficient_of_variation": 0.27,
+      "credit_rating": "AA",
+      "risk_tier": "HIGH QUALITY"
+    }
+  ],
+  "visual_artifacts": [
+    "reports\\figures\\08_crop_economic_frontier.png",
+    "reports\\figures\\08_fertilizer_roi_response.png"
+  ]
+}

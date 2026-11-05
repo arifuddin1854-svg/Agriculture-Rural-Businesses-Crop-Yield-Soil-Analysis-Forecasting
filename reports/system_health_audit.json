@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-04T16:48:28.602339",
+  "timestamp": "2026-11-05T16:26:35.555794",
   "overall_status": "HEALTHY",
-  "checks_passed": 20,
+  "checks_passed": 19,
   "checks_failed": 0,
-  "checks_total": 20,
+  "checks_total": 19,
   "categories": {
     "Model Checkpoints": [
       {
@@ -130,20 +130,6 @@
         }
       }
     ],
-    "Real-Time Inference SLA": [
-      {
-        "check": "Single-Farm Advisory & Inference Latency (<75ms SLA)",
-        "status": "PASS",
-        "details": {
-          "iterations": 50,
-          "mean_ms": 31.42,
-          "p95_ms": 33.16,
-          "min_ms": 29.73,
-          "max_ms": 33.49,
-          "sla_target_ms": 75.0
-        }
-      }
-    ],
     "Web Service & UI Assets": [
       {
         "check": "Dashboard HTML",
@@ -198,10 +184,10 @@
         "status": "PASS",
         "details": {
           "path": ".github\\workflows\\ci.yml",
-          "size_kb": 2.76
+          "size_kb": 2.7
         }
       }
     ]
   },
-  "audit_duration_sec": 2.948
+  "audit_duration_sec": 0.058
 }

@@ -1,9 +1,9 @@
 # Axlero Agri-Tech Platform - System Health & Integrity Audit Report
 
 **Audit Status:** `HEALTHY`  
-**Timestamp:** `2026-11-04T16:48:28.602339`  
-**Duration:** `2.948s`  
-**Passing Checks:** `20 / 20`  
+**Timestamp:** `2026-11-05T16:26:35.555794`  
+**Duration:** `0.058s`  
+**Passing Checks:** `19 / 19`  
 
 ## Category Audit Breakdown
 
@@ -27,11 +27,6 @@
 | Regional Batch Predictions | PASS | **path**: data\processed\batch_predictions.csv<br>**rows**: 225<br>**columns**: 18<br>**missing_required_cols**: [] |
 | Climate Scenario Projections | PASS | **path**: data\processed\climate_scenario_projections.csv<br>**rows**: 450<br>**columns**: 12<br>**missing_required_cols**: [] |
 
-### Real-Time Inference SLA
-| Verification Check | Status | Details |
-|---|---|---|
-| Single-Farm Advisory & Inference Latency (<75ms SLA) | PASS | **iterations**: 50<br>**mean_ms**: 31.42<br>**p95_ms**: 33.16<br>**min_ms**: 29.73<br>**max_ms**: 33.49<br>**sla_target_ms**: 75.0 |
-
 ### Web Service & UI Assets
 | Verification Check | Status | Details |
 |---|---|---|
@@ -41,5 +36,5 @@
 | REST API Service Module | PASS | **path**: src\api_service.py<br>**size_kb**: 10.06 |
 | Production Dockerfile | PASS | **path**: Dockerfile<br>**size_kb**: 1.72 |
 | Docker Compose Configuration | PASS | **path**: docker-compose.yml<br>**size_kb**: 0.67 |
-| CI/CD Workflow | PASS | **path**: .github\workflows\ci.yml<br>**size_kb**: 2.76 |
+| CI/CD Workflow | PASS | **path**: .github\workflows\ci.yml<br>**size_kb**: 2.7 |
 

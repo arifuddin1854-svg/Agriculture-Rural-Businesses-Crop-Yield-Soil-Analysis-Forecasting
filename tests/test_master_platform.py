@@ -17,9 +17,9 @@ class TestMasterPlatformOrchestrator(unittest.TestCase):
     def test_01_stages_registration(self):
         """Verify all enterprise pipeline stages are registered with valid modules."""
         stages = self.orchestrator.list_stages()
-        self.assertEqual(len(stages), 8)
+        self.assertEqual(len(stages), 9)
 
-        expected_ids = ["pipeline", "features", "models", "neural", "satellite", "inference", "climate", "audit"]
+        expected_ids = ["pipeline", "features", "models", "neural", "satellite", "inference", "climate", "economics", "audit"]
         stage_ids = [s["id"] for s in stages]
         self.assertListEqual(stage_ids, expected_ids)
 
@@ -34,7 +34,7 @@ class TestMasterPlatformOrchestrator(unittest.TestCase):
         summary = self.orchestrator.run_all(dry_run=True)
         self.assertEqual(summary["overall_status"], "SUCCESS")
         self.assertIsNone(summary["failed_stage"])
-        self.assertEqual(len(summary["stage_results"]), 8)
+        self.assertEqual(len(summary["stage_results"]), 9)
 
         for res in summary["stage_results"]:
             self.assertEqual(res["status"], "DRY_RUN")
