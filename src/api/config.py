@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     # CORS configuration
     BACKEND_CORS_ORIGINS: List[str] = ["*"]
 
+    # JWT Authentication & Security Settings
+    SECRET_KEY: str = "axlero_agri_super_secure_jwt_token_secret_key_2026_9b8c"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

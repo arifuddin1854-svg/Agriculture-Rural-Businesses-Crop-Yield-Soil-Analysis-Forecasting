@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from src.api.database import get_db
 from src.api.models.user import User
 from src.api.schemas.user import UserCreate, UserRead
+from src.api.auth import get_password_hash
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -19,10 +20,10 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="A user with this email already exists.",
         )
-    # Placeholder for password hashing (e.g. bcrypt/passlib/argon2)
-    fake_hashed_pwd = f"pbkdf2_sha256${user_in.password}"
+    # PBKDF2-HMAC-SHA256 password hashing
+    hashed_pwd = get_password_hash(user_in.password)
     user_dict = user_in.model_dump(exclude={"password"})
-    db_user = User(**user_dict, hashed_password=fake_hashed_pwd)
+    db_user = User(**user_dict, hashed_password=hashed_pwd)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

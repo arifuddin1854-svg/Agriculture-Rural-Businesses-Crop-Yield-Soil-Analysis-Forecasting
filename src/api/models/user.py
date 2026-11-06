@@ -21,6 +21,7 @@ class User(Base, TimestampMixin):
     # Relationships
     soil_logs = relationship("SoilLog", back_populates="user", cascade="all, delete-orphan")
     yield_predictions = relationship("YieldPrediction", back_populates="user", cascade="all, delete-orphan")
+    financial_logs = relationship("FinancialAuditLog", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email}, role={self.role})>"

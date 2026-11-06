@@ -12,6 +12,8 @@ from src.api.routes.soil_logs import router as soil_logs_router
 from src.api.routes.predictions import router as predictions_router
 from src.api.routes.predict import router as predict_router
 from src.api.routes.recommend import router as recommend_router
+from src.api.routes.financial import router as financial_router
+from src.api.auth import router as auth_router
 from src.api.middleware.error_handler import register_exception_handlers
 
 # Configure logging
@@ -68,18 +70,22 @@ def create_application() -> FastAPI:
             allow_headers=["*"],
         )
 
-    # Direct Routes (allowing POST /predict/yield and POST /recommend/crop without prefix)
+    # Direct Routes (allowing POST /predict/yield, POST /recommend/crop, POST /business/financial-forecast without prefix)
     app.include_router(health_router)
+    app.include_router(auth_router)
     app.include_router(predict_router)
     app.include_router(recommend_router)
+    app.include_router(financial_router)
 
     # API v1 Versioned Routes
     app.include_router(health_router, prefix=settings.API_V1_STR)
+    app.include_router(auth_router, prefix=settings.API_V1_STR)
     app.include_router(users_router, prefix=settings.API_V1_STR)
     app.include_router(soil_logs_router, prefix=settings.API_V1_STR)
     app.include_router(predictions_router, prefix=settings.API_V1_STR)
     app.include_router(predict_router, prefix=settings.API_V1_STR)
     app.include_router(recommend_router, prefix=settings.API_V1_STR)
+    app.include_router(financial_router, prefix=settings.API_V1_STR)
 
     @app.get("/", tags=["Root"])
     def root():

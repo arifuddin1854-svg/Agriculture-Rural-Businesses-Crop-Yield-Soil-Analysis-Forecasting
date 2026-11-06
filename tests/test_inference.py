@@ -51,7 +51,11 @@ class TestInferenceEngineDay11(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.engine = CropYieldInferenceEngine("models/best_yield_regressor.joblib")
+        model_path = Path("models/best_yield_regressor.joblib")
+        if not model_path.exists():
+            from src.models import run_spatial_modeling_pipeline
+            run_spatial_modeling_pipeline()
+        cls.engine = CropYieldInferenceEngine(str(model_path))
 
     def test_01_engine_initialization(self):
         """Verify model loads with correct feature count and performance metrics."""
