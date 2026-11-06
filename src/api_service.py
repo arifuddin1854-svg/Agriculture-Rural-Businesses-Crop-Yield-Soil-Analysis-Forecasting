@@ -11,6 +11,7 @@ Responsible for:
   * POST /api/v1/predict -> Real-time yield inference with 95% confidence interval
   * POST /api/v1/prescribe -> Comprehensive yield prediction + counterfactual prescriptive soil advisory
   * POST /api/v1/batch -> Multi-farm batch predictions
+  * POST /api/v1/economic-roi -> Farm financial profit margins and revenue breakdown
 """
 
 import argparse
@@ -203,6 +204,18 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                     "predictions": batch_records
                 }
                 self._send_json(response, 200)
+
+            elif path in ["/api/v1/economic-roi", "/economic-roi"]:
+                if not body:
+                    self._send_error("Request body cannot be empty", 400)
+                    return
+                from src.economic_optimizer import AgriEconomicOptimizer
+                optimizer = AgriEconomicOptimizer()
+                crop = body.get("crop_type", body.get("crop", "Wheat"))
+                yield_val = float(body.get("predicted_yield_mt_ha", body.get("yield_mt_ha", 4.0)))
+                area = float(body.get("planted_area_ha", body.get("area_ha", 1.0)))
+                fin = optimizer.calculate_farm_financials(crop, yield_val, area)
+                self._send_json(fin, 200)
 
             else:
                 self._send_error(f"POST endpoint '{path}' not found", 404)

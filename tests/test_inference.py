@@ -210,6 +210,23 @@ class TestInferenceEngineDay11(unittest.TestCase):
         self.assertIn("prescriptive_advisory", data)
         self.assertGreaterEqual(len(data["prescriptive_advisory"]["prescriptions"]), 1)
 
+    def test_10_api_economic_roi_endpoint(self):
+        """Verify REST API POST /api/v1/economic-roi returns financial statement."""
+        req_body = {
+            "crop_type": "Wheat",
+            "predicted_yield_mt_ha": 4.5,
+            "planted_area_ha": 25.0
+        }
+        handler = DummyHTTPHandler(method="POST", path="/api/v1/economic-roi", body=req_body)
+        handler.do_POST()
+
+        self.assertEqual(handler.response_status, 200)
+        data = handler.get_json_response()
+        self.assertEqual(data["crop_type"], "Wheat")
+        self.assertIn("per_hectare", data)
+        self.assertIn("farm_totals", data)
+        self.assertGreater(data["farm_totals"]["gross_revenue_usd"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

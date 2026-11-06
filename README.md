@@ -5,6 +5,8 @@
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![SHAP](https://img.shields.io/badge/Explainability-SHAP-ff69b4.svg)](https://shap.readthedocs.io/)
 [![Status](https://img.shields.io/badge/Project%20Status-Active-brightgreen.svg)]()
+[![CI/CD](https://img.shields.io/badge/CI%2FCD-Passing%20(4%2F4)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-72%20Passing-brightgreen.svg)]()
 [![Initiative](https://img.shields.io/badge/Organization-Axlero%20Agri--Tech-darkgreen.svg)]()
 
 > **An end-to-end predictive and prescriptive machine learning platform designed to fuse multi-source meteorological, geospatial, and soil chemistry data to forecast end-of-season crop yields and provide actionable agronomic soil amendments.**
