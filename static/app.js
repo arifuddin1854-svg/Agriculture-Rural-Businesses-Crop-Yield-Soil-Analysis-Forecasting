@@ -232,6 +232,31 @@ function updateResultsUI(data) {
     });
   }
 
+  // Live Economic Valuation Calculation
+  const cropPrices = { "Wheat": 265, "Rice": 340, "Maize": 210, "Soybean": 480, "Cotton": 750 };
+  const cropBaseCosts = { "Wheat": 420, "Rice": 580, "Maize": 390, "Soybean": 360, "Cotton": 620 };
+  const cropPrice = cropPrices[data.crop_type] || 265;
+  const baseCost = cropBaseCosts[data.crop_type] || 420;
+  const fertCost = 120.0;
+  const totalCostHa = baseCost + fertCost;
+  const grossRevHa = data.predicted_yield_mt_ha * cropPrice;
+  const netProfitHa = grossRevHa - totalCostHa;
+  const marginPct = (netProfitHa / Math.max(1, grossRevHa)) * 100;
+  const totalFarmRev = grossRevHa * data.planted_area_ha;
+
+  const elGross = document.getElementById("econ-gross-revenue");
+  if (elGross) elGross.textContent = `$${grossRevHa.toFixed(2)} / Ha`;
+  const elCost = document.getElementById("econ-total-cost");
+  if (elCost) elCost.textContent = `$${totalCostHa.toFixed(2)} / Ha`;
+  const elNet = document.getElementById("econ-net-profit");
+  if (elNet) elNet.textContent = `$${netProfitHa.toFixed(2)} / Ha`;
+  const elMargin = document.getElementById("econ-margin-pct");
+  if (elMargin) elMargin.textContent = `${marginPct.toFixed(1)}%`;
+  const elFarmTotal = document.getElementById("econ-farm-total");
+  if (elFarmTotal) elFarmTotal.textContent = `$${totalFarmRev.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+  const elBadge = document.getElementById("kpi-net-profit-badge");
+  if (elBadge) elBadge.textContent = `$${netProfitHa.toFixed(2)} / Ha Margin`;
+
   // Update simulator baseline
   document.getElementById("sim-base-yield").textContent = `${data.predicted_yield_mt_ha.toFixed(2)} MT/Ha`;
   document.getElementById("sim-base-prod").textContent = `${prod.expected_mt.toFixed(1)} MT Total`;
