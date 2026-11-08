@@ -80,6 +80,27 @@ class TestMasterDataPipeline(unittest.TestCase):
         ]:
             self.assertTrue((self.figures_dir / fig_name).exists(), f"Missing figure: {fig_name}")
 
+    def test_stage_isolation_execution(self):
+        """Verify individual stages can be executed sequentially with modular artifact validation."""
+        stage1_files = self.orchestrator.run_stage_1_ingestion()
+        self.assertIn("weather", stage1_files)
+        self.assertTrue(Path(stage1_files["weather"]).exists())
+
+        stage2_files = self.orchestrator.run_stage_2_cleaning()
+        self.assertIn("clean_files", stage2_files)
+        self.assertTrue(Path(stage2_files["clean_files"]["weather"]).exists())
+
+        stage3_files = self.orchestrator.run_stage_3_weather_aggregation()
+        self.assertIn("weather_aggregated", stage3_files)
+        self.assertTrue(Path(stage3_files["weather_aggregated"]).exists())
+
+        stage4_files = self.orchestrator.run_stage_4_fusion()
+        self.assertIn("csv", stage4_files)
+        self.assertTrue(Path(stage4_files["csv"]).exists())
+
+        self.orchestrator.run_stage_5_eda()
+        self.assertTrue((self.report_dir / "eda_summary_report.md").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

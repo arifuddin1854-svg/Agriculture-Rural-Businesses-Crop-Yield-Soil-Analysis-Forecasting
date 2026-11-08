@@ -1,10 +1,14 @@
 """
-Unit and Integration Tests for Day 18 Master Platform Orchestrator
+Unit and Integration Tests for Day 18 & Day 20 Master Platform Orchestrator
 Member 1: Systems & ML Infrastructure Engineer
 Axlero Agri-Tech Platform
 """
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
+
 from run_master_platform import MasterPlatformOrchestrator, PLATFORM_STAGES
 
 
@@ -57,6 +61,35 @@ class TestMasterPlatformOrchestrator(unittest.TestCase):
         self.assertEqual(res["stage"], "audit")
         self.assertEqual(res["status"], "SUCCESS")
         self.assertGreater(res["duration_sec"], 0.0)
+
+    def test_06_execute_economics_stage_dry_run(self):
+        """Verify Day 19 economics stage is recognized and executable."""
+        res = self.orchestrator.execute_stage("economics", dry_run=True)
+        self.assertEqual(res["stage"], "economics")
+        self.assertEqual(res["status"], "DRY_RUN")
+        self.assertIn("Markowitz", res["description"])
+
+    def test_07_platform_execution_report_generation(self):
+        """Verify Day 20 execution report telemetry export produces valid JSON and Markdown."""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            json_out = Path(tmp_dir) / "test_exec.json"
+            md_out = Path(tmp_dir) / "test_exec.md"
+
+            summary = self.orchestrator.run_all(
+                dry_run=True,
+                save_report=True,
+                json_report_path=str(json_out),
+                md_report_path=str(md_out)
+            )
+            self.assertEqual(summary["overall_status"], "SUCCESS")
+            self.assertTrue(json_out.exists())
+            self.assertTrue(md_out.exists())
+
+            with open(json_out, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self.assertEqual(data["overall_status"], "SUCCESS")
+            self.assertEqual(data["stages_executed"], 9)
+            self.assertIn("milestone", data)
 
 
 if __name__ == "__main__":
