@@ -2,6 +2,8 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from src.api.config import settings
 from src.api.database import engine, Base
@@ -15,9 +17,16 @@ from src.api.routes.recommend import router as recommend_router
 from src.api.routes.financial import router as financial_router
 from src.api.auth import router as auth_router
 from src.api.middleware.error_handler import register_exception_handlers
+from src.api.middleware import (
+    limiter,
+    _rate_limit_exceeded_handler,
+    SecurityHeadersMiddleware,
+)
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+)
 logger = logging.getLogger("axlero_agri_api")
 
 
@@ -35,9 +44,72 @@ async def lifespan(app: FastAPI):
             Base.metadata.create_all(bind=engine)
     except Exception as exc:
         logger.warning(f"Could not automatically create tables at startup: {exc}")
-    
+
     yield
     logger.info("Shutting down Axlero Agri-Tech API services...")
+
+
+_OPENAPI_TAGS = [
+    {
+        "name": "Authentication & User Sessions",
+        "description": (
+            "OAuth2 Password Flow and JWT token issuance, refresh, and revocation. "
+            "Supports user registration, login, and authenticated session management."
+        ),
+    },
+    {
+        "name": "Financial Calculator & Agribusiness Analytics",
+        "description": (
+            "POST /business/financial-forecast computes Gross Revenue, "
+            "Total Operational Costs, Net Profit, ROI percentage, break-even yield, "
+            "and SHAP diagnostic factor attributions for agribusiness planning."
+        ),
+    },
+    {
+        "name": "Yield Prediction & Inference",
+        "description": (
+            "POST /predict/yield ingests soil chemistry (N, P, K, pH) and "
+            "weather parameters to produce machine-learning yield forecasts "
+            "with confidence scores and SHAP feature importances."
+        ),
+    },
+    {
+        "name": "Crop Recommendations",
+        "description": (
+            "POST /recommend/crop returns ranked crop suitability scores "
+            "based on soil composition, climate data, and historical performance."
+        ),
+    },
+    {
+        "name": "Health",
+        "description": (
+            "Service liveness and readiness probes used by load balancers, "
+            "orchestration platforms, and CI health checks."
+        ),
+    },
+    {
+        "name": "Users",
+        "description": (
+            "CRUD operations for farmer, agronomist, and business manager "
+            "user profiles. Requires admin or authenticated access."
+        ),
+    },
+    {
+        "name": "Soil Logs",
+        "description": (
+            "Create and query historical soil chemistry measurement records "
+            "tied to farm locations and assessment sessions."
+        ),
+    },
+    {
+        "name": "Predictions",
+        "description": (
+            "Retrieve historical yield prediction records and assessment "
+            "reports linked to soil logs and farm sessions."
+        ),
+    },
+    {"name": "Root", "description": "API root welcome and navigation endpoint."},
+]
 
 
 def create_application() -> FastAPI:
@@ -55,19 +127,28 @@ def create_application() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         lifespan=lifespan,
+        openapi_tags=_OPENAPI_TAGS,
     )
+
+    # Attach rate-limiter state so slowapi can intercept requests
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_middleware(SlowAPIMiddleware)
+
+    # Security Headers Middleware (applied to all responses)
+    app.add_middleware(SecurityHeadersMiddleware)
 
     # Register Standardized Exception Handlers
     register_exception_handlers(app)
 
-    # CORS Middleware
+    # CORS Middleware — restrict to configured origins in production
     if settings.BACKEND_CORS_ORIGINS:
         app.add_middleware(
             CORSMiddleware,
             allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
             allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
+            allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allow_headers=["Authorization", "Content-Type", "Accept"],
         )
 
     # Direct Routes (allowing POST /predict/yield, POST /recommend/crop, POST /business/financial-forecast without prefix)

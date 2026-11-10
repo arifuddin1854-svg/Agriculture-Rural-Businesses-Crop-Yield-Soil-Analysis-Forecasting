@@ -40,3 +40,5 @@ PyJWT>=2.8.0
 python-multipart>=0.0.9
 pytest>=8.0.0
 email-validator
+slowapi>=0.1.10
+limits>=4.0.0

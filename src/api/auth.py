@@ -39,7 +39,9 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 # Configuration Constants
-SECRET_KEY = getattr(settings, "SECRET_KEY", "axlero_agri_super_secure_jwt_token_secret_key_2026_9b8c")
+SECRET_KEY = getattr(
+    settings, "SECRET_KEY", "axlero_agri_super_secure_jwt_token_secret_key_2026_9b8c"
+)
 ALGORITHM = getattr(settings, "JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = getattr(settings, "ACCESS_TOKEN_EXPIRE_MINUTES", 1440)
 PBKDF2_ITERATIONS = 100_000
@@ -48,6 +50,7 @@ PBKDF2_ITERATIONS = 100_000
 # ---------------------------------------------------------------------------
 # Password Hashing & Verification
 # ---------------------------------------------------------------------------
+
 
 def get_password_hash(password: str) -> str:
     """
@@ -102,6 +105,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 # JWT Token Issuance & Decoding
 # ---------------------------------------------------------------------------
 
+
 def create_access_token(
     data: Dict[str, Any],
     expires_delta: Optional[timedelta] = None,
@@ -116,13 +120,48 @@ def create_access_token(
     else:
         expire = now + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    to_encode.update({
-        "exp": expire,
-        "iat": now,
-        "nbf": now,
-    })
+    to_encode.update(
+        {
+            "exp": expire,
+            "iat": now,
+            "nbf": now,
+            "jti": str(uuid.uuid4()),
+        }
+    )
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+# Default refresh token lifetime: 7 days
+REFRESH_TOKEN_EXPIRE_DAYS = 7
+
+
+def create_refresh_token(
+    data: Dict[str, Any],
+    expires_delta: Optional[timedelta] = None,
+) -> str:
+    """
+    Generates a long-lived JWT refresh token (default 7 days).
+    Includes ``type: "refresh"`` claim to distinguish from access tokens.
+    Refresh tokens are stateless — no DB storage required.
+    """
+    to_encode = data.copy()
+    now = datetime.now(timezone.utc)
+    if expires_delta:
+        expire = now + expires_delta
+    else:
+        expire = now + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+
+    to_encode.update(
+        {
+            "exp": expire,
+            "iat": now,
+            "nbf": now,
+            "type": "refresh",
+            "jti": str(uuid.uuid4()),
+        }
+    )
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def decode_access_token(token: str) -> Dict[str, Any]:
@@ -151,11 +190,13 @@ def decode_access_token(token: str) -> Dict[str, Any]:
 # Authentication Schemas
 # ---------------------------------------------------------------------------
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
     expires_in_seconds: int
     user: UserRead
+    refresh_token: Optional[str] = None
 
 
 class LoginRequest(BaseModel):
@@ -163,9 +204,18 @@ class LoginRequest(BaseModel):
     password: str = Field(..., min_length=1)
 
 
+class RefreshTokenRequest(BaseModel):
+    """Request body for token rotation — supply a valid refresh JWT."""
+
+    refresh_token: str = Field(
+        ..., description="A valid refresh token issued by /auth/token or /auth/login."
+    )
+
+
 # ---------------------------------------------------------------------------
 # User Authentication Helpers & Dependencies
 # ---------------------------------------------------------------------------
+
 
 def authenticate_user(db: Session, email: str, password: str) -> Optional[User]:
     """
@@ -290,21 +340,24 @@ def login_for_access_token(
         )
 
     expires_seconds = ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    _token_data = {
+        "sub": str(user.id),
+        "user_id": str(user.id),
+        "email": user.email,
+        "role": user.role,
+    }
     access_token = create_access_token(
-        data={
-            "sub": str(user.id),
-            "user_id": str(user.id),
-            "email": user.email,
-            "role": user.role,
-        },
+        data=_token_data,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
+    refresh_token = create_refresh_token(data=_token_data)
 
     return Token(
         access_token=access_token,
         token_type="bearer",
         expires_in_seconds=expires_seconds,
         user=UserRead.model_validate(user),
+        refresh_token=refresh_token,
     )
 
 
@@ -334,21 +387,24 @@ def login_json(
         )
 
     expires_seconds = ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    _token_data = {
+        "sub": str(user.id),
+        "user_id": str(user.id),
+        "email": user.email,
+        "role": user.role,
+    }
     access_token = create_access_token(
-        data={
-            "sub": str(user.id),
-            "user_id": str(user.id),
-            "email": user.email,
-            "role": user.role,
-        },
+        data=_token_data,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
+    refresh_token = create_refresh_token(data=_token_data)
 
     return Token(
         access_token=access_token,
         token_type="bearer",
         expires_in_seconds=expires_seconds,
         user=UserRead.model_validate(user),
+        refresh_token=refresh_token,
     )
 
 
@@ -383,21 +439,24 @@ def register_user(
     db.refresh(db_user)
 
     expires_seconds = ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    _token_data = {
+        "sub": str(db_user.id),
+        "user_id": str(db_user.id),
+        "email": db_user.email,
+        "role": db_user.role,
+    }
     access_token = create_access_token(
-        data={
-            "sub": str(db_user.id),
-            "user_id": str(db_user.id),
-            "email": db_user.email,
-            "role": db_user.role,
-        },
+        data=_token_data,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
     )
+    refresh_token = create_refresh_token(data=_token_data)
 
     return Token(
         access_token=access_token,
         token_type="bearer",
         expires_in_seconds=expires_seconds,
         user=UserRead.model_validate(db_user),
+        refresh_token=refresh_token,
     )
 
 
@@ -412,3 +471,87 @@ def get_me(current_user: User = Depends(get_current_active_user)):
     """
     return current_user
 
+
+@router.post(
+    "/refresh",
+    response_model=Token,
+    summary="JWT Token Rotation — Exchange Refresh Token for New Access Token",
+    responses={
+        200: {"description": "New access token and rotated refresh token issued."},
+        401: {
+            "description": (
+                "Refresh token is invalid, expired, or not a refresh-type token."
+            )
+        },
+    },
+)
+def refresh_access_token(
+    body: RefreshTokenRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Token rotation endpoint for secure session persistence on mobile and dashboard clients.
+
+    Supply a valid ``refresh_token`` (issued by ``/auth/token`` or ``/auth/login``).
+    Returns a fresh **access token** (short-lived) and a new **refresh token** (rotation).
+
+    Rejects:
+    - Expired refresh tokens (HTTP 401)
+    - Access tokens submitted as refresh tokens (HTTP 401)
+    - Tokens for non-existent users (HTTP 401)
+    """
+    _unauth = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or expired refresh token.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(body.refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token has expired. Please log in again.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    except jwt.PyJWTError:
+        raise _unauth
+
+    # Enforce token-type guard: reject access tokens submitted here
+    if payload.get("type") != "refresh":
+        raise _unauth
+
+    user_id_str = payload.get("user_id") or payload.get("sub")
+    if not user_id_str:
+        raise _unauth
+
+    try:
+        user_uuid = uuid.UUID(str(user_id_str))
+        user = db.query(User).filter(User.id == user_uuid).first()
+    except (ValueError, TypeError):
+        user = db.query(User).filter(User.email == str(user_id_str)).first()
+
+    if not user or not user.is_active:
+        raise _unauth
+
+    expires_seconds = ACCESS_TOKEN_EXPIRE_MINUTES * 60
+    _token_data = {
+        "sub": str(user.id),
+        "user_id": str(user.id),
+        "email": user.email,
+        "role": user.role,
+    }
+    new_access_token = create_access_token(
+        data=_token_data,
+        expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    new_refresh_token = create_refresh_token(data=_token_data)
+
+    logger.info("Token rotated for user %s (id=%s)", user.email, user.id)
+
+    return Token(
+        access_token=new_access_token,
+        token_type="bearer",
+        expires_in_seconds=expires_seconds,
+        user=UserRead.model_validate(user),
+        refresh_token=new_refresh_token,
+    )
