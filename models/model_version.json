@@ -1,0 +1,18 @@
+{
+    "current_version": "1.0.0",
+    "model_name": "Crop Yield Prediction Model",
+    "model_type": "XGBoost Regressor",
+    "status": "stable",
+    "created_at": "2026-11-10",
+    "artifacts": {
+        "joblib": "models/crop_yield_xgb.joblib",
+        "onnx": "models/crop_yield_model.onnx"
+    },
+    "version_history": [
+        {
+            "version": "1.0.0",
+            "status": "stable",
+            "description": "Initial verified XGBoost model with ONNX export"
+        }
+    ]
+}
