@@ -76,6 +76,19 @@ class TestAgriEconomicOptimizer(unittest.TestCase):
         self.assertTrue(Path("reports/economic_optimization_report.json").exists())
         self.assertTrue(Path("reports/economic_optimization_report.md").exists())
 
+    def test_05_calculate_farm_financials_all_crops(self):
+        """Verify farm financial valuation evaluates cleanly for all supported crops."""
+        for crop in COMMODITY_PRICES_USD_PER_MT.keys():
+            fin = self.optimizer.calculate_farm_financials(
+                crop=crop,
+                predicted_yield_mt_ha=3.5,
+                planted_area_ha=20.0
+            )
+            self.assertEqual(fin["crop_type"], crop)
+            self.assertGreater(fin["farm_totals"]["gross_revenue_usd"], 0)
+            self.assertGreater(fin["farm_totals"]["total_production_cost_usd"], 0)
+            self.assertIn("profit_margin_pct", fin["per_hectare"])
+
 
 if __name__ == "__main__":
     unittest.main()

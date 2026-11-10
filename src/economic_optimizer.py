@@ -468,8 +468,38 @@ class AgriEconomicOptimizer:
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Agricultural Economics & Crop Portfolio Optimizer")
+    parser.add_argument("--crop", type=str, default=None, help="Target crop type for financial evaluation")
+    parser.add_argument("--yield-mt-ha", type=float, default=None, help="Predicted yield in MT/Ha")
+    parser.add_argument("--area-ha", type=float, default=50.0, help="Planted farm area in hectares")
+    parser.add_argument("--nitrogen", type=float, default=110.0, help="Applied nitrogen in kg/ha")
+    parser.add_argument("--phosphorus", type=float, default=45.0, help="Applied phosphorus in kg/ha")
+    parser.add_argument("--potassium", type=float, default=45.0, help="Applied potassium in kg/ha")
+    args = parser.parse_args()
+
     optimizer = AgriEconomicOptimizer()
-    optimizer.run_full_economic_pipeline()
+    if args.crop and args.yield_mt_ha is not None:
+        fin = optimizer.calculate_farm_financials(
+            crop=args.crop,
+            predicted_yield_mt_ha=args.yield_mt_ha,
+            planted_area_ha=args.area_ha,
+            nitrogen_kg_ha=args.nitrogen,
+            phosphorus_kg_ha=args.phosphorus,
+            potassium_kg_ha=args.potassium
+        )
+        print("=" * 65)
+        print(f"🌾 FARM FINANCIAL VALUATION: {fin['crop_type']} ({fin['planted_area_ha']} Ha)")
+        print("=" * 65)
+        print(f"Predicted Yield        : {fin['predicted_yield_mt_ha']} MT/Ha")
+        print(f"Commodity Benchmark    : ${fin['commodity_price_usd_per_mt']} / MT")
+        print(f"Gross Revenue          : ${fin['per_hectare']['gross_revenue_usd']:.2f} / Ha  (${fin['farm_totals']['gross_revenue_usd']:,.2f} Total)")
+        print(f"Total Production Cost  : ${fin['per_hectare']['total_production_cost_usd']:.2f} / Ha  (${fin['farm_totals']['total_production_cost_usd']:,.2f} Total)")
+        print(f"Net Farm Profit        : ${fin['per_hectare']['net_profit_usd']:.2f} / Ha  (${fin['farm_totals']['net_profit_usd']:,.2f} Total)")
+        print(f"Operating Margin       : {fin['per_hectare']['profit_margin_pct']:.1f}%")
+        print("=" * 65)
+    else:
+        optimizer.run_full_economic_pipeline()
 
 
 if __name__ == "__main__":

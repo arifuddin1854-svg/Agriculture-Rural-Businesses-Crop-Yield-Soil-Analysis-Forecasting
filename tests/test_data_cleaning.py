@@ -74,6 +74,34 @@ class TestSoilDataCleaning(unittest.TestCase):
         self.assertEqual(tracker.imputed_nulls.get("nitrogen_kg_ha"), 1)
         self.assertEqual(tracker.boundary_violations.get("soil_ph"), 2)
 
+    def test_soil_global_median_fallback(self):
+        """Verify soil properties fall back to global median when group median is unavailable."""
+        df_isolated = pd.DataFrame([
+            {
+                "district_id": "DIST_999",
+                "soil_type": "Rare Soil",
+                "nitrogen_kg_ha": np.nan,
+                "phosphorus_kg_ha": 40.0,
+                "potassium_kg_ha": 140.0,
+                "soil_ph": 6.5,
+                "organic_matter_pct": 1.2,
+                "electrical_conductivity_ds_m": 0.4
+            },
+            {
+                "district_id": "DIST_998",
+                "soil_type": "Common Soil",
+                "nitrogen_kg_ha": 100.0,
+                "phosphorus_kg_ha": 40.0,
+                "potassium_kg_ha": 140.0,
+                "soil_ph": 6.5,
+                "organic_matter_pct": 1.2,
+                "electrical_conductivity_ds_m": 0.4
+            }
+        ])
+        clean_df = clean_soil_chemistry(df_isolated)
+        self.assertFalse(clean_df["nitrogen_kg_ha"].isnull().any())
+        self.assertEqual(clean_df.loc[0, "nitrogen_kg_ha"], 100.0)
+
 
 class TestWeatherDataCleaning(unittest.TestCase):
     """Test suite for weather data cleaning, rolling imputation, and temperature sanity."""

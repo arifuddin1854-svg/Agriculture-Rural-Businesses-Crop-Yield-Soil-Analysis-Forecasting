@@ -101,6 +101,15 @@ class TestMasterDataPipeline(unittest.TestCase):
         self.orchestrator.run_stage_5_eda()
         self.assertTrue((self.report_dir / "eda_summary_report.md").exists())
 
+    def test_pipeline_directory_initialization(self):
+        """Verify orchestrator properly sets up all required directories and configurations."""
+        self.assertTrue(self.raw_dir.is_dir())
+        self.assertTrue(self.interim_dir.is_dir())
+        self.assertTrue(self.processed_dir.is_dir())
+        self.assertTrue(self.report_dir.is_dir())
+        self.assertTrue(self.figures_dir.is_dir())
+        self.assertEqual(self.orchestrator.seed, 42)
+
 
 if __name__ == "__main__":
     unittest.main()
