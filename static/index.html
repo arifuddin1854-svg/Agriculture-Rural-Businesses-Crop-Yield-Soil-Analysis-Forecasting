@@ -80,7 +80,49 @@
               <h2 class="card-title">🌱 Farm Telemetry & Soil Profile</h2>
               <p class="card-desc">Enter soil laboratory results and farm boundary parameters.</p>
             </div>
-            <button type="button" id="btn-reset-form" class="btn-text">Reset</button>
+            <div class="header-actions">
+              <label class="live-toggle-wrapper" title="Automatically recompute yield forecast whenever any input changes">
+                <input type="checkbox" id="toggle-live-forecast" checked>
+                <span class="live-toggle-switch"></span>
+                <span class="live-toggle-label">⚡ Live Auto-Forecast</span>
+              </label>
+              <button type="button" id="btn-reset-form" class="btn-text">Reset</button>
+            </div>
+          </div>
+
+          <!-- Quick Scenario Selector -->
+          <div class="preset-scenarios-container">
+            <div class="preset-scenarios-header">
+              <span class="preset-label">⚡ Quick Presets (1-Click Examiner Scenarios):</span>
+              <span class="preset-hint">Click any preset to simulate realistic agronomic conditions</span>
+            </div>
+            <div class="preset-buttons-row" id="preset-buttons-group">
+              <button type="button" class="preset-btn active" data-preset="wheat-optimal">
+                <span class="preset-icon">🌾</span>
+                <span class="preset-name">Balanced Wheat</span>
+                <span class="preset-detail">Alluvial Soil • Dist 101</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="rice-humid">
+                <span class="preset-icon">🍚</span>
+                <span class="preset-name">Coastal Rice</span>
+                <span class="preset-detail">Clay Loam • Dist 106</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="maize-intensive">
+                <span class="preset-icon">🌽</span>
+                <span class="preset-name">Intensive Maize</span>
+                <span class="preset-detail">Black Soil • High N-P-K</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="acidic-stressed">
+                <span class="preset-icon">⚠️</span>
+                <span class="preset-name">Acid Shock Farm</span>
+                <span class="preset-detail">Laterite pH 5.2 • Liming Rx</span>
+              </button>
+              <button type="button" class="preset-btn" data-preset="arid-drought">
+                <span class="preset-icon">☀️</span>
+                <span class="preset-name">Drought Stress</span>
+                <span class="preset-detail">Semi-Arid • Low Rain</span>
+              </button>
+            </div>
           </div>
 
           <form id="farm-forecast-form">
@@ -162,31 +204,40 @@
               <!-- Nitrogen -->
               <div class="slider-field">
                 <div class="slider-header">
-                  <span class="field-label">Nitrogen (N)</span>
+                  <div class="field-label-group">
+                    <span class="field-label">Nitrogen (N)</span>
+                    <span class="badge badge-success badge-nutrient" id="badge-nitrogen">Optimal (115.0)</span>
+                  </div>
                   <span class="field-value"><strong id="val-nitrogen">115.0</strong> kg/ha</span>
                 </div>
                 <input type="range" id="nitrogen_kg_ha" name="nitrogen_kg_ha" min="20" max="220" value="115.0" step="1" class="form-range">
-                <div class="range-limits"><span>20 kg/ha (Low)</span><span>Opt: 110-130</span><span>220 kg/ha (High)</span></div>
+                <div class="range-limits"><span>20 kg/ha (Low)</span><span>Opt: 100-140</span><span>220 kg/ha (High)</span></div>
               </div>
 
               <!-- Phosphorus -->
               <div class="slider-field">
                 <div class="slider-header">
-                  <span class="field-label">Phosphorus (P)</span>
+                  <div class="field-label-group">
+                    <span class="field-label">Phosphorus (P)</span>
+                    <span class="badge badge-success badge-nutrient" id="badge-phosphorus">Optimal (48.0)</span>
+                  </div>
                   <span class="field-value"><strong id="val-phosphorus">48.0</strong> kg/ha</span>
                 </div>
                 <input type="range" id="phosphorus_kg_ha" name="phosphorus_kg_ha" min="10" max="100" value="48.0" step="1" class="form-range">
-                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 45-60</span><span>100 kg/ha</span></div>
+                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 35-65</span><span>100 kg/ha</span></div>
               </div>
 
               <!-- Potassium -->
               <div class="slider-field">
                 <div class="slider-header">
-                  <span class="field-label">Potassium (K)</span>
+                  <div class="field-label-group">
+                    <span class="field-label">Potassium (K)</span>
+                    <span class="badge badge-success badge-nutrient" id="badge-potassium">Optimal (55.0)</span>
+                  </div>
                   <span class="field-value"><strong id="val-potassium">55.0</strong> kg/ha</span>
                 </div>
                 <input type="range" id="potassium_kg_ha" name="potassium_kg_ha" min="10" max="150" value="55.0" step="1" class="form-range">
-                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 45-70</span><span>150 kg/ha</span></div>
+                <div class="range-limits"><span>10 kg/ha</span><span>Opt: 40-80</span><span>150 kg/ha</span></div>
               </div>
             </div>
 
@@ -248,8 +299,18 @@
           <!-- Primary KPI Banner -->
           <div class="panel card hero-kpi-card" id="forecast-kpi-card">
             <div class="kpi-header">
-              <span class="kpi-tag" id="kpi-crop-badge">Wheat Forecast</span>
-              <span class="kpi-confidence" id="kpi-ci-spread">95% Confidence Interval: ±0.68 MT/Ha</span>
+              <div class="kpi-header-left">
+                <span class="kpi-tag" id="kpi-crop-badge">Wheat Forecast</span>
+                <span class="kpi-confidence" id="kpi-ci-spread">95% Confidence Interval: ±0.68 MT/Ha</span>
+              </div>
+              <button type="button" id="btn-print-report" class="btn btn-secondary btn-sm print-report-btn" title="Export or print farmer agronomic advisory report">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+                <span>Export PDF Report</span>
+              </button>
             </div>
 
             <div class="kpi-body">
@@ -643,6 +704,9 @@
       </div>
     </div>
   </footer>
+
+  <!-- Floating Toast Notifications -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>

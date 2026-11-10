@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initBatchAnalytics();
   initDriftMonitoring();
   initDemoButton();
+  initPresetScenarios();
+  initPrintReport();
 });
 
 // =========================================================================
@@ -37,10 +39,73 @@ function initTabs() {
 }
 
 // =========================================================================
-// 2. Form Inputs & Sliders Sync
+// 2. Form Inputs, Reactive Sliders & Nutrient Badges
 // =========================================================================
+let liveForecastDebounceTimer = null;
+
+function triggerLiveForecastDebounced() {
+  const liveToggle = document.getElementById("toggle-live-forecast");
+  if (!liveToggle || !liveToggle.checked) return;
+
+  clearTimeout(liveForecastDebounceTimer);
+  liveForecastDebounceTimer = setTimeout(() => {
+    const form = document.getElementById("farm-forecast-form");
+    if (form) {
+      form.dispatchEvent(new Event("submit"));
+    }
+  }, 260);
+}
+
+function updateNutrientBadges() {
+  const nVal = parseFloat(document.getElementById("nitrogen_kg_ha")?.value || 115);
+  const pVal = parseFloat(document.getElementById("phosphorus_kg_ha")?.value || 48);
+  const kVal = parseFloat(document.getElementById("potassium_kg_ha")?.value || 55);
+
+  const nBadge = document.getElementById("badge-nitrogen");
+  if (nBadge) {
+    if (nVal < 80) {
+      nBadge.textContent = "Deficient (<80)";
+      nBadge.className = "badge badge-warning badge-nutrient";
+    } else if (nVal <= 140) {
+      nBadge.textContent = "Optimal";
+      nBadge.className = "badge badge-success badge-nutrient";
+    } else {
+      nBadge.textContent = "High (>140)";
+      nBadge.className = "badge badge-info badge-nutrient";
+    }
+  }
+
+  const pBadge = document.getElementById("badge-phosphorus");
+  if (pBadge) {
+    if (pVal < 35) {
+      pBadge.textContent = "Deficient (<35)";
+      pBadge.className = "badge badge-warning badge-nutrient";
+    } else if (pVal <= 65) {
+      pBadge.textContent = "Optimal";
+      pBadge.className = "badge badge-success badge-nutrient";
+    } else {
+      pBadge.textContent = "High (>65)";
+      pBadge.className = "badge badge-info badge-nutrient";
+    }
+  }
+
+  const kBadge = document.getElementById("badge-potassium");
+  if (kBadge) {
+    if (kVal < 40) {
+      kBadge.textContent = "Deficient (<40)";
+      kBadge.className = "badge badge-warning badge-nutrient";
+    } else if (kVal <= 80) {
+      kBadge.textContent = "Optimal";
+      kBadge.className = "badge badge-success badge-nutrient";
+    } else {
+      kBadge.textContent = "High (>80)";
+      kBadge.className = "badge badge-info badge-nutrient";
+    }
+  }
+}
+
 function initFormInputs() {
-  // Sync Sliders with Value Display
+  // Sync Sliders with Value Display & Badges
   const sliders = [
     { id: "nitrogen_kg_ha", valId: "val-nitrogen", unit: " kg/ha" },
     { id: "phosphorus_kg_ha", valId: "val-phosphorus", unit: " kg/ha" },
@@ -53,6 +118,8 @@ function initFormInputs() {
     if (el && disp) {
       el.addEventListener("input", (e) => {
         disp.textContent = parseFloat(e.target.value).toFixed(1);
+        updateNutrientBadges();
+        triggerLiveForecastDebounced();
       });
     }
   });
@@ -76,6 +143,7 @@ function initFormInputs() {
 
       phBadge.textContent = `${ph.toFixed(2)} (${label})`;
       phBadge.className = `badge ${cls}`;
+      triggerLiveForecastDebounced();
     });
   }
 
@@ -87,7 +155,26 @@ function initFormInputs() {
       card.classList.add("selected");
       const radio = card.querySelector('input[type="radio"]');
       if (radio) radio.checked = true;
+      triggerLiveForecastDebounced();
     });
+  });
+
+  // Attach live auto-forecast to select and input elements
+  const triggerInputs = [
+    "district_id",
+    "soil_type",
+    "planted_area_ha",
+    "organic_matter_pct",
+    "electrical_conductivity_ds_m",
+    "cumulative_rainfall_mm",
+    "mean_temp_max",
+    "mean_vpd_kpa"
+  ];
+  triggerInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("change", triggerLiveForecastDebounced);
+    }
   });
 
   // Reset Button
@@ -100,8 +187,13 @@ function initFormInputs() {
       document.getElementById("val-phosphorus").textContent = "48.0";
       document.getElementById("val-potassium").textContent = "55.0";
       document.getElementById("soil_ph").dispatchEvent(new Event("input"));
+      updateNutrientBadges();
+      showToast("Form Reset", "Telemetry inputs reset to default values.", "🔄");
+      triggerLiveForecastDebounced();
     });
   }
+
+  updateNutrientBadges();
 }
 
 // =========================================================================
@@ -619,7 +711,220 @@ function initDemoButton() {
     document.getElementById("mean_temp_max").value = 33.4;
     document.getElementById("mean_vpd_kpa").value = 1.35;
 
+    showToast("Demo Farm Loaded", "Acidic soil profile loaded with limestone amendment simulation.", "🧪");
+
     // Trigger submission
     document.getElementById("farm-forecast-form").dispatchEvent(new Event("submit"));
   });
+}
+
+// =========================================================================
+// 8. 1-Click Examiner Quick Presets
+// =========================================================================
+function initPresetScenarios() {
+  const presetButtons = document.querySelectorAll(".preset-btn");
+  if (!presetButtons.length) return;
+
+  const presets = {
+    "wheat-optimal": {
+      crop: "Wheat",
+      district: "DIST_101",
+      soil: "Alluvial",
+      area: 65.0,
+      nitrogen: 115.0,
+      phosphorus: 48.0,
+      potassium: 55.0,
+      ph: 6.50,
+      som: 2.2,
+      ec: 0.35,
+      rain: 820.0,
+      tmax: 31.8,
+      vpd: 1.25,
+      toastTitle: "Wheat Scenario Loaded",
+      toastMsg: "Optimal alluvial soil profile in Central Plains (DIST_101)."
+    },
+    "rice-humid": {
+      crop: "Rice",
+      district: "DIST_106",
+      soil: "Clay Loam",
+      area: 45.0,
+      nitrogen: 130.0,
+      phosphorus: 52.0,
+      potassium: 62.0,
+      ph: 6.20,
+      som: 2.6,
+      ec: 0.42,
+      rain: 1250.0,
+      tmax: 32.2,
+      vpd: 1.10,
+      toastTitle: "Coastal Rice Scenario Loaded",
+      toastMsg: "High-precipitation clay loam profile in Eastern Coastal Plain (DIST_106)."
+    },
+    "maize-intensive": {
+      crop: "Maize",
+      district: "DIST_104",
+      soil: "Black Soil",
+      area: 80.0,
+      nitrogen: 165.0,
+      phosphorus: 68.0,
+      potassium: 75.0,
+      ph: 6.85,
+      som: 2.4,
+      ec: 0.48,
+      rain: 920.0,
+      tmax: 33.5,
+      vpd: 1.40,
+      toastTitle: "Intensive Maize Scenario Loaded",
+      toastMsg: "High N-P-K demand profile in Northern River Valley (DIST_104)."
+    },
+    "acidic-stressed": {
+      crop: "Wheat",
+      district: "DIST_103",
+      soil: "Laterite",
+      area: 50.0,
+      nitrogen: 85.0,
+      phosphorus: 32.0,
+      potassium: 38.0,
+      ph: 5.15,
+      som: 1.2,
+      ec: 0.30,
+      rain: 740.0,
+      tmax: 32.6,
+      vpd: 1.35,
+      toastTitle: "Acid Shock Farm Loaded",
+      toastMsg: "Acidic laterite (pH 5.15) triggering Limestone CaCO3 priority advisory."
+    },
+    "arid-drought": {
+      crop: "Wheat",
+      district: "DIST_102",
+      soil: "Red Sandy Loam",
+      area: 55.0,
+      nitrogen: 90.0,
+      phosphorus: 36.0,
+      potassium: 44.0,
+      ph: 7.80,
+      som: 0.8,
+      ec: 0.85,
+      rain: 380.0,
+      tmax: 36.5,
+      vpd: 2.10,
+      toastTitle: "Drought Stress Scenario Loaded",
+      toastMsg: "Low rainfall & high VPD in Semi-Arid Basin (DIST_102) with drought flags."
+    }
+  };
+
+  presetButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const presetKey = btn.getAttribute("data-preset");
+      const p = presets[presetKey];
+      if (!p) return;
+
+      presetButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      // Select crop
+      const cropCard = document.querySelector(`.crop-card[data-crop="${p.crop}"]`);
+      if (cropCard) cropCard.click();
+
+      // Form values
+      const distEl = document.getElementById("district_id");
+      if (distEl) distEl.value = p.district;
+
+      const soilEl = document.getElementById("soil_type");
+      if (soilEl) soilEl.value = p.soil;
+
+      const areaEl = document.getElementById("planted_area_ha");
+      if (areaEl) areaEl.value = p.area;
+
+      // N-P-K sliders
+      const nEl = document.getElementById("nitrogen_kg_ha");
+      if (nEl) {
+        nEl.value = p.nitrogen;
+        document.getElementById("val-nitrogen").textContent = p.nitrogen.toFixed(1);
+      }
+
+      const pEl = document.getElementById("phosphorus_kg_ha");
+      if (pEl) {
+        pEl.value = p.phosphorus;
+        document.getElementById("val-phosphorus").textContent = p.phosphorus.toFixed(1);
+      }
+
+      const kEl = document.getElementById("potassium_kg_ha");
+      if (kEl) {
+        kEl.value = p.potassium;
+        document.getElementById("val-potassium").textContent = p.potassium.toFixed(1);
+      }
+
+      // pH
+      const phEl = document.getElementById("soil_ph");
+      if (phEl) {
+        phEl.value = p.ph;
+        phEl.dispatchEvent(new Event("input"));
+      }
+
+      // Other properties
+      const somEl = document.getElementById("organic_matter_pct");
+      if (somEl) somEl.value = p.som;
+
+      const ecEl = document.getElementById("electrical_conductivity_ds_m");
+      if (ecEl) ecEl.value = p.ec;
+
+      const rainEl = document.getElementById("cumulative_rainfall_mm");
+      if (rainEl) rainEl.value = p.rain;
+
+      const tmaxEl = document.getElementById("mean_temp_max");
+      if (tmaxEl) tmaxEl.value = p.tmax;
+
+      const vpdEl = document.getElementById("mean_vpd_kpa");
+      if (vpdEl) vpdEl.value = p.vpd;
+
+      updateNutrientBadges();
+      const icon = p.crop === "Wheat" ? "🌾" : (p.crop === "Rice" ? "🍚" : (p.crop === "Maize" ? "🌽" : "⚡"));
+      showToast(p.toastTitle, p.toastMsg, icon);
+
+      // Trigger submission
+      const form = document.getElementById("farm-forecast-form");
+      if (form) form.dispatchEvent(new Event("submit"));
+    });
+  });
+}
+
+// =========================================================================
+// 9. Farmer Advisory Report PDF / Print
+// =========================================================================
+function initPrintReport() {
+  const btn = document.getElementById("btn-print-report");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    showToast("Exporting Report", "Opening browser print dialog to print or save as PDF.", "🖨️");
+    setTimeout(() => {
+      window.print();
+    }, 350);
+  });
+}
+
+// =========================================================================
+// 10. Lightweight Toast Notification Engine
+// =========================================================================
+function showToast(title, message, icon = "🌱") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = `
+    <span class="toast-icon">${icon}</span>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      <div class="toast-msg">${message}</div>
+    </div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add("toast-fadeout");
+    setTimeout(() => toast.remove(), 320);
+  }, 3200);
 }

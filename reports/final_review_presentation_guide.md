@@ -64,3 +64,4 @@ flowchart LR
 | **Q: How are recommendations generated?** | *"We use **TreeSHAP** to decouple exogenous variables (weather) from controllable factors (N, P, K, pH), following the partial derivative gradient $\frac{\partial \hat{y}}{\partial x_{\text{controllable}}}$ to find the highest yield gain per dollar invested."* |
 | **Q: What is the inference SLA latency?** | *"Single-farm inference benchmarks at **59.33ms**, satisfying our enterprise sub-75ms SLA requirement."* |
 | **Q: Is the system tested?** | *"Yes, **78 unit and integration tests passing (100% pass rate)**, 0 flake8 violations, and a 20-point system health audit passing."* |
+
