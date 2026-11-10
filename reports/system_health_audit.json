@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-10T10:49:52.139984",
+  "timestamp": "2026-11-10T17:42:13.193680",
   "overall_status": "HEALTHY",
-  "checks_passed": 19,
+  "checks_passed": 20,
   "checks_failed": 0,
-  "checks_total": 19,
+  "checks_total": 20,
   "categories": {
     "Model Checkpoints": [
       {
@@ -130,6 +130,20 @@
         }
       }
     ],
+    "Real-Time Inference SLA": [
+      {
+        "check": "Single-Farm Advisory & Inference Latency (<75ms SLA)",
+        "status": "PASS",
+        "details": {
+          "iterations": 50,
+          "mean_ms": 59.33,
+          "p95_ms": 61.21,
+          "min_ms": 53.77,
+          "max_ms": 123.86,
+          "sla_target_ms": 75.0
+        }
+      }
+    ],
     "Web Service & UI Assets": [
       {
         "check": "Dashboard HTML",
@@ -189,5 +203,5 @@
       }
     ]
   },
-  "audit_duration_sec": 0.076
+  "audit_duration_sec": 5.616
 }

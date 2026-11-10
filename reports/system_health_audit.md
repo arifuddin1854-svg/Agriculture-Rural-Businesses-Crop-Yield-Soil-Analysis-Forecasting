@@ -1,9 +1,9 @@
 # Axlero Agri-Tech Platform - System Health & Integrity Audit Report
 
 **Audit Status:** `HEALTHY`  
-**Timestamp:** `2026-11-10T10:49:52.139984`  
-**Duration:** `0.076s`  
-**Passing Checks:** `19 / 19`  
+**Timestamp:** `2026-11-10T17:42:13.193680`  
+**Duration:** `5.616s`  
+**Passing Checks:** `20 / 20`  
 
 ## Category Audit Breakdown
 
@@ -26,6 +26,11 @@
 | Multimodal Agri Dataset | PASS | **path**: data\processed\multimodal_agri_dataset.csv<br>**rows**: 225<br>**columns**: 50<br>**missing_required_cols**: [] |
 | Regional Batch Predictions | PASS | **path**: data\processed\batch_predictions.csv<br>**rows**: 225<br>**columns**: 18<br>**missing_required_cols**: [] |
 | Climate Scenario Projections | PASS | **path**: data\processed\climate_scenario_projections.csv<br>**rows**: 450<br>**columns**: 12<br>**missing_required_cols**: [] |
+
+### Real-Time Inference SLA
+| Verification Check | Status | Details |
+|---|---|---|
+| Single-Farm Advisory & Inference Latency (<75ms SLA) | PASS | **iterations**: 50<br>**mean_ms**: 59.33<br>**p95_ms**: 61.21<br>**min_ms**: 53.77<br>**max_ms**: 123.86<br>**sla_target_ms**: 75.0 |
 
 ### Web Service & UI Assets
 | Verification Check | Status | Details |
