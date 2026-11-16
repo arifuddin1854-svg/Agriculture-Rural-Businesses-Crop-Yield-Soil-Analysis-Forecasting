@@ -95,10 +95,18 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                 self._serve_file(index_path, "text/html")
                 return
 
-        # 2. Serve Static Assets (.css, .js, .svg, .json)
+        # 2. Serve Static Assets (.css, .js, .svg, .json, .pdf)
+        if path in ["/report.pdf", "/api/v1/report.pdf", "/report"]:
+            pdf_path = Path("reports/Axlero_Project_Report.pdf")
+            if pdf_path.exists():
+                self._serve_file(pdf_path, "application/pdf")
+                return
+
         if "." in path:
             filename = Path(path).name
             target_file = static_dir / filename
+            if not target_file.exists() and filename == "Axlero_Project_Report.pdf":
+                target_file = Path("reports") / filename
             if target_file.exists():
                 ext = target_file.suffix.lower()
                 ctype = {
@@ -106,7 +114,8 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                     ".css": "text/css",
                     ".js": "application/javascript",
                     ".json": "application/json",
-                    ".svg": "image/svg+xml"
+                    ".svg": "image/svg+xml",
+                    ".pdf": "application/pdf"
                 }.get(ext, "application/octet-stream")
                 self._serve_file(target_file, ctype)
                 return
