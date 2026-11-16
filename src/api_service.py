@@ -95,17 +95,23 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                 self._serve_file(index_path, "text/html")
                 return
 
-        # 2. Serve Static Assets (.css, .js, .svg, .json, .pdf)
+        # 2. Serve Static Assets (.css, .js, .svg, .json, .pdf, .pptx)
         if path in ["/report.pdf", "/api/v1/report.pdf", "/report"]:
             pdf_path = Path("reports/Axlero_Project_Report.pdf")
             if pdf_path.exists():
                 self._serve_file(pdf_path, "application/pdf")
                 return
 
+        if path in ["/presentation.pptx", "/api/v1/presentation.pptx", "/presentation", "/slides"]:
+            pptx_path = Path("reports/Axlero_Project_Presentation.pptx")
+            if pptx_path.exists():
+                self._serve_file(pptx_path, "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+                return
+
         if "." in path:
             filename = Path(path).name
             target_file = static_dir / filename
-            if not target_file.exists() and filename == "Axlero_Project_Report.pdf":
+            if not target_file.exists() and filename in ["Axlero_Project_Report.pdf", "Axlero_Project_Presentation.pptx"]:
                 target_file = Path("reports") / filename
             if target_file.exists():
                 ext = target_file.suffix.lower()
@@ -115,7 +121,8 @@ class InferenceRequestHandler(BaseHTTPRequestHandler):
                     ".js": "application/javascript",
                     ".json": "application/json",
                     ".svg": "image/svg+xml",
-                    ".pdf": "application/pdf"
+                    ".pdf": "application/pdf",
+                    ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
                 }.get(ext, "application/octet-stream")
                 self._serve_file(target_file, ctype)
                 return
